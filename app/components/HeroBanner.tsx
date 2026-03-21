@@ -1,3 +1,5 @@
+import Link from "next/link";
+
 export default function HeroBanner() {
   return (
     <section
@@ -18,18 +20,19 @@ export default function HeroBanner() {
         creative community.
       </p>
 
-      <button
+      <Link
+        href="/catalog"
         style={{
+          display: "inline-block",
           padding: "0.75rem 1.5rem",
           backgroundColor: "#1976D2",
           color: "white",
-          border: "none",
           borderRadius: "5px",
-          cursor: "pointer",
+          textDecoration: "none",
         }}
       >
         Browse Catalog
-      </button>
+      </Link>
     </section>
   );
 }

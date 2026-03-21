@@ -1,33 +1,7 @@
 import Header from "../components/Header";
 import ProductCard from "../components/ProductCard";
 import Footer from "../components/Footer";
-
-const mockProducts = [
-  {
-    id: 1,
-    name: "Handmade Vase",
-    description: "A carefully crafted ceramic vase.",
-    price: "$25.00",
-  },
-  {
-    id: 2,
-    name: "Knitted Scarf",
-    description: "A soft handmade scarf for everyday wear.",
-    price: "$18.00",
-  },
-  {
-    id: 3,
-    name: "Wooden Bowl",
-    description: "A polished wooden bowl made by hand.",
-    price: "$30.00",
-  },
-  {
-    id: 4,
-    name: "Beaded Bracelet",
-    description: "A colorful bracelet with handmade details.",
-    price: "$12.00",
-  },
-];
+import { mockProducts } from "../data/products";
 
 export default function CatalogPage() {
   return (
@@ -35,6 +9,7 @@ export default function CatalogPage() {
       <Header />
 
       <main style={{ padding: "2rem", maxWidth: "1000px", margin: "0 auto" }}>
+        {/* Page Header */}
         <section>
           <h2>Catalog</h2>
           <p style={{ color: "#555" }}>
@@ -42,6 +17,7 @@ export default function CatalogPage() {
           </p>
         </section>
 
+        {/* Filters */}
         <section
           style={{
             display: "flex",
@@ -88,6 +64,7 @@ export default function CatalogPage() {
           </select>
         </section>
 
+        {/* Product Grid */}
         <section style={{ marginTop: "2rem" }}>
           <div
             style={{
@@ -99,6 +76,7 @@ export default function CatalogPage() {
             {mockProducts.map((product) => (
               <ProductCard
                 key={product.id}
+                id={product.id}
                 name={product.name}
                 description={product.description}
                 price={product.price}
