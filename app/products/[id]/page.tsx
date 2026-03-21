@@ -1,17 +1,18 @@
+import Link from "next/link";
 import Header from "../../components/Header";
 import Footer from "../../components/Footer";
 import { mockProducts } from "../../data/products";
 
 type Props = {
-  params: {
+  params: Promise<{
     id: string;
-  };
+  }>;
 };
 
-export default function ProductDetailPage({ params }: Props) {
-  const product = mockProducts.find(
-    (item) => item.id === Number(params.id)
-  );
+export default async function ProductDetailPage({ params }: Props) {
+  const { id } = await params;
+
+  const product = mockProducts.find((item) => item.id === Number(id));
 
   if (!product) {
     return (
@@ -49,9 +50,11 @@ export default function ProductDetailPage({ params }: Props) {
 
           <div>
             <h2>{product.name}</h2>
+
             <p style={{ color: "#555", marginTop: "1rem" }}>
               {product.description}
             </p>
+
             <p
               style={{
                 fontWeight: "bold",
@@ -62,10 +65,31 @@ export default function ProductDetailPage({ params }: Props) {
               {product.price}
             </p>
 
-            <p style={{ marginTop: "1.5rem" }}>
-              More product details, seller information, and reviews will be added
-              here later.
+            <p style={{ marginTop: "1rem" }}>
+              Seller:{" "}
+              <Link href="/sellers" style={{ color: "#1976D2" }}>
+                View seller profile
+              </Link>
             </p>
+
+            <p style={{ marginTop: "1.5rem" }}>
+              More product details and reviews will be added here later.
+            </p>
+
+            <div
+              style={{
+                marginTop: "2rem",
+                padding: "1rem",
+                backgroundColor: "#f5f5f5",
+                borderRadius: "8px",
+              }}
+            >
+              <h3>Loading and API Note</h3>
+              <p style={{ marginTop: "0.5rem", color: "#555" }}>
+                This page is currently using mock data. Loading states and full
+                API integration will be added once the backend is ready.
+              </p>
+            </div>
           </div>
         </section>
       </main>
