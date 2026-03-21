@@ -1,4 +1,14 @@
-export default function ProductCard() {
+type ProductCardProps = {
+  name: string;
+  description: string;
+  price: string;
+};
+
+export default function ProductCard({
+  name,
+  description,
+  price,
+}: ProductCardProps) {
   return (
     <article
       style={{
@@ -11,17 +21,15 @@ export default function ProductCard() {
     >
       <img
         src="https://via.placeholder.com/200"
-        alt="Sample Product"
+        alt={name}
         style={{ width: "100%", borderRadius: "6px", marginBottom: "0.5rem" }}
       />
 
-      <h3 style={{ margin: "0.5rem 0" }}>Sample Product</h3>
+      <h3 style={{ margin: "0.5rem 0" }}>{name}</h3>
 
-      <p style={{ fontSize: "0.9rem", color: "#555" }}>
-        Handmade item description goes here.
-      </p>
+      <p style={{ fontSize: "0.9rem", color: "#555" }}>{description}</p>
 
-      <p style={{ fontWeight: "bold", marginTop: "0.5rem" }}>$25.00</p>
+      <p style={{ fontWeight: "bold", marginTop: "0.5rem" }}>{price}</p>
     </article>
   );
 }

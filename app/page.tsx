@@ -22,9 +22,21 @@ export default function Home() {
               marginTop: "1rem",
             }}
           >
-            <ProductCard />
-            <ProductCard />
-            <ProductCard />
+            <ProductCard
+              name="Handmade Vase"
+              description="A carefully crafted ceramic vase."
+              price="$25.00"
+            />
+            <ProductCard
+              name="Knitted Scarf"
+              description="A soft handmade scarf for everyday wear."
+              price="$18.00"
+            />
+            <ProductCard
+              name="Wooden Bowl"
+              description="A polished wooden bowl made by hand."
+              price="$30.00"
+            />
           </div>
         </section>
       </main>
