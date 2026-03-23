@@ -2,6 +2,7 @@ import Header from "./components/Header";
 import HeroBanner from "./components/HeroBanner";
 import ProductCard from "./components/ProductCard";
 import Footer from "./components/Footer";
+import { mockProducts } from "./data/products";
 
 export default function Home() {
   return (
@@ -22,9 +23,15 @@ export default function Home() {
               marginTop: "1rem",
             }}
           >
-            <ProductCard />
-            <ProductCard />
-            <ProductCard />
+            {mockProducts.slice(0, 3).map((product) => (
+              <ProductCard
+                key={product.id}
+                id={product.id}
+                name={product.name}
+                description={product.description}
+                price={product.price}
+              />
+            ))}
           </div>
         </section>
       </main>
