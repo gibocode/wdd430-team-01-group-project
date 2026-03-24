@@ -1,0 +1,89 @@
+import { findProductById, updateProduct, deleteProductById } from '@/models/product';
+import { z } from 'zod';
+
+// Product data validation
+const ProductSchema = z.object({
+    title: z.string().min(6),
+    reviewer: z.string(),
+    image: z.string().min(1),
+    description: z.string().optional(),
+    price: z.number().positive(),
+});
+
+// API to get single product by ID
+export async function GET(request: Request, { params }: { params: Promise<{ productId: string }> }): Promise<Response> {
+    try {
+        const { productId } = await params;
+        const product = await findProductById(productId);
+        return Response.json({
+            success: true,
+            data: product,
+        });
+    }
+    catch (error) {
+        console.error(error);
+        return Response.json(
+            {
+                success: false,
+                message: 'Failed to fetch product.',
+            },
+            { status: 500 }
+        );
+    }
+}
+
+// API to update a product
+export async function PUT(request: Request, { params }: { params: Promise<{ productId: string }>}): Promise<Response> {
+    try {
+        const { productId } = await params;
+        const body = await request.json();
+
+        // Validate product data before updating
+        const validated = ProductSchema.parse(body);
+
+        // Update product by ID
+        const success = updateProduct(productId, validated);
+
+        return Response.json({
+            success: success,
+            message: 'Product successfully updated.',
+            data: body
+        });
+    }
+    catch (error) {
+        console.error(error);
+        return Response.json(
+            {
+                success: false,
+                message: 'Failed to update product.',
+            },
+            { status: 500 }
+        );
+    }
+}
+
+// API to delete a product
+export async function DELETE(request: Request, { params }: { params: Promise<{ productId: string }>}): Promise<Response> {
+    try {
+        const { productId } = await params;
+
+        // Delete product by ID
+        const success = await deleteProductById(productId);
+
+        return Response.json({
+            success: success,
+            message: 'Product successfully deleted.',
+            id: productId
+        });
+    }
+    catch (error) {
+        console.error(error);
+        return Response.json(
+            {
+                success: false,
+                message: 'Failed to delete product.',
+            },
+            { status: 500 }
+        );
+    }
+}
