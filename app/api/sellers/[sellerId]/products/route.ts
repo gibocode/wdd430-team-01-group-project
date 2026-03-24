@@ -1,4 +1,4 @@
-import { createProduct } from '@/models/product';
+import { getAllProductsBySellerId, createProduct } from "@/models/product";
 import { z } from 'zod';
 import { Product } from '@/types/product';
 import { ObjectId } from 'mongodb';
@@ -11,8 +11,33 @@ const ProductSchema = z.object({
     price: z.number().positive(),
 });
 
+// API to get all products of the seller
+export async function GET(request: Request, { params }: { params: Promise<{ sellerId: string }>}): Promise<Response> {
+    try {
+        const { sellerId } = await params;
+
+        // Get all products of the seller
+        const products = await getAllProductsBySellerId(sellerId);
+
+        return Response.json({
+            success: true,
+            data: products,
+        });
+    }
+    catch (error) {
+        console.error(error);
+        return Response.json(
+            {
+                success: false,
+                message: 'Failed to get products for this seller.',
+            },
+            { status: 500 }
+        );
+    }
+}
+
 // API to create a product for a seller
-export async function POST(request: Request, { params }: { params: Promise<{ sellerId: string }>}) {
+export async function POST(request: Request, { params }: { params: Promise<{ sellerId: string }>}): Promise<Response> {
     try {
         const { sellerId } = await params;
         const body = await request.json();
@@ -33,6 +58,7 @@ export async function POST(request: Request, { params }: { params: Promise<{ sel
 
         return Response.json({
             success: true,
+            message: 'Product successfully created.',
             data: product,
         });
     }
