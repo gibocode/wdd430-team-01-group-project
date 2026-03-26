@@ -1,14 +1,8 @@
-import getDbClient from '@/lib/mongodb';
-import { ObjectId } from 'mongodb';
+import getDatabase from '@/lib/mongodb';
 import { User } from '@/types/user';
+import { validateId } from '@/lib/utils';
 
 const COLLECTION = 'users';
-
-// Get database client
-const getDatabase = async () => {
-    const client = await getDbClient();
-    return client.db(process.env.MONGODB_DB);
-}
 
 // Get database collection
 const getCollection = async () => {
@@ -24,8 +18,9 @@ export async function getAllUsers() {
 
 // Get single user by ID
 export async function findUserById(id: string) {
+    const _id = validateId(id);
     const collection = await getCollection();
-    return collection.findOne({ _id: new ObjectId(id) });
+    return collection.findOne({ _id: _id });
 }
 
 // Get single user by email
@@ -47,10 +42,11 @@ export async function createUser(props: Omit<User, '_id' | 'createdAt' | 'update
 }
 
 // Update user
-export async function updateUser(id: string, props: Partial<User>): Promise<boolean> {
+export async function updateUser(id: string, props: Omit<User, '_id' | 'createdAt' | 'updatedAt'>): Promise<boolean> {
+    const _id = validateId(id);
     const collection = await getCollection();
     const result = await collection.updateOne(
-        { _id: new ObjectId(id) },
+        { _id: _id },
         {
             $set: {
                 ...props,
@@ -63,7 +59,8 @@ export async function updateUser(id: string, props: Partial<User>): Promise<bool
 
 // Delete user by ID
 export async function deleteUserById(id: string): Promise<boolean> {
+    const _id = validateId(id);
     const collection = await getCollection();
-    const result = await collection.deleteOne({ _id: new ObjectId(id) });
+    const result = await collection.deleteOne({ _id: _id });
     return result.deletedCount > 0;
 }

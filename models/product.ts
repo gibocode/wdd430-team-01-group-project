@@ -1,14 +1,8 @@
-import getDbClient from '@/lib/mongodb';
-import { ObjectId } from 'mongodb';
+import getDatabase from '@/lib/mongodb';
 import { Product } from '@/types/product';
+import { validateId } from '@/lib/utils';
 
 const COLLECTION = 'products';
-
-// Get database client
-const getDatabase = async () => {
-    const client = await getDbClient();
-    return client.db(process.env.MONGODB_DB);
-}
 
 // Get database collection
 const getCollection = async () => {
@@ -24,14 +18,16 @@ export async function getAllProducts() {
 
 // Get all products by seller ID
 export async function getAllProductsBySellerId(id: string) {
+    const sellerId = validateId(id);
     const collection = await getCollection();
-    return collection.find({ sellerId: new ObjectId(id) }).toArray();
+    return collection.find({ sellerId: sellerId }).toArray();
 }
 
 // Get single product by ID
 export async function findProductById(id: string) {
+    const _id = validateId(id);
     const collection = await getCollection();
-    return collection.findOne({ _id: new ObjectId(id) });
+    return collection.findOne({ _id: _id });
 }
 
 // Create new product
@@ -47,10 +43,11 @@ export async function createProduct(props: Omit<Product, '_id' | 'createdAt' | '
 }
 
 // Update product
-export async function updateProduct(id: string, props: Partial<Product>): Promise<boolean> {
+export async function updateProduct(id: string, props: Omit<Product, '_id' | 'createdAt' | 'updatedAt'>): Promise<boolean> {
+    const _id = validateId(id);
     const collection = await getCollection();
     const result = await collection.updateOne(
-        { _id: new ObjectId(id) },
+        { _id: _id },
         {
             $set: {
                 ...props,
@@ -63,7 +60,8 @@ export async function updateProduct(id: string, props: Partial<Product>): Promis
 
 // Delete product by ID
 export async function deleteProductById(id: string): Promise<boolean> {
+    const _id = validateId(id);
     const collection = await getCollection();
-    const result = await collection.deleteOne({ _id: new ObjectId(id) });
+    const result = await collection.deleteOne({ _id: _id });
     return result.deletedCount > 0;
 }
