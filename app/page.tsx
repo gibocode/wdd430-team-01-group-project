@@ -2,9 +2,11 @@ import Header from "./components/Header";
 import HeroBanner from "./components/HeroBanner";
 import ProductCard from "./components/ProductCard";
 import Footer from "./components/Footer";
-import { mockProducts } from "./data/products";
+import { fetchProducts } from "@/lib/api/products";
 
-export default function Home() {
+export default async function Home() {
+  const products = await fetchProducts();
+
   return (
     <>
       <Header />
@@ -23,13 +25,14 @@ export default function Home() {
               marginTop: "1rem",
             }}
           >
-            {mockProducts.slice(0, 3).map((product) => (
+            {products.slice(0, 3).map((product) => (
               <ProductCard
                 key={product.id}
                 id={product.id}
                 name={product.name}
                 description={product.description}
                 price={product.price}
+                image={product.image}
               />
             ))}
           </div>

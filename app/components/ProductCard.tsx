@@ -1,10 +1,11 @@
 import Link from "next/link";
 
 type ProductCardProps = {
-  id: number;
+  id: string;
   name: string;
   description: string;
   price: string;
+  image: string;
 };
 
 export default function ProductCard({
@@ -12,6 +13,7 @@ export default function ProductCard({
   name,
   description,
   price,
+  image,
 }: ProductCardProps) {
   return (
     <Link
@@ -30,7 +32,7 @@ export default function ProductCard({
         }}
       >
         <img
-          src="https://via.placeholder.com/200"
+          src={image}
           alt={name}
           style={{
             width: "100%",
