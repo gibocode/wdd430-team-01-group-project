@@ -4,19 +4,39 @@ import Footer from "../components/Footer";
 import { fetchProducts } from "@/lib/api/products";
 
 export default async function CatalogPage() {
-  const products = await fetchProducts();
+  const { products, error } = await fetchProducts();
 
   return (
     <>
       <Header />
 
-      <main style={{ padding: "2rem", maxWidth: "1000px", margin: "0 auto" }}>
+      <main
+        style={{
+          padding: "1.5rem",
+          maxWidth: "1000px",
+          margin: "0 auto",
+        }}
+      >
         <section>
           <h2>Catalog</h2>
           <p style={{ color: "#555" }}>
             Browse handcrafted items from talented artisans.
           </p>
         </section>
+
+        {error && (
+          <p
+            style={{
+              marginTop: "1rem",
+              padding: "0.75rem 1rem",
+              backgroundColor: "#fff4e5",
+              color: "#8a5a00",
+              borderRadius: "6px",
+            }}
+          >
+            {error}
+          </p>
+        )}
 
         <section
           style={{
@@ -28,7 +48,12 @@ export default async function CatalogPage() {
         >
           <select
             defaultValue=""
-            style={{ padding: "0.5rem", borderRadius: "4px" }}
+            style={{
+              padding: "0.5rem",
+              borderRadius: "4px",
+              minWidth: "180px",
+              flex: "1 1 180px",
+            }}
           >
             <option value="" disabled>
               Filter by category
@@ -41,7 +66,12 @@ export default async function CatalogPage() {
 
           <select
             defaultValue=""
-            style={{ padding: "0.5rem", borderRadius: "4px" }}
+            style={{
+              padding: "0.5rem",
+              borderRadius: "4px",
+              minWidth: "180px",
+              flex: "1 1 180px",
+            }}
           >
             <option value="" disabled>
               Filter by price
@@ -53,7 +83,12 @@ export default async function CatalogPage() {
 
           <select
             defaultValue=""
-            style={{ padding: "0.5rem", borderRadius: "4px" }}
+            style={{
+              padding: "0.5rem",
+              borderRadius: "4px",
+              minWidth: "180px",
+              flex: "1 1 180px",
+            }}
           >
             <option value="" disabled>
               Sort by
@@ -65,24 +100,28 @@ export default async function CatalogPage() {
         </section>
 
         <section style={{ marginTop: "2rem" }}>
-          <div
-            style={{
-              display: "grid",
-              gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))",
-              gap: "1.5rem",
-            }}
-          >
-            {products.map((product) => (
-              <ProductCard
-                key={product.id}
-                id={product.id}
-                name={product.name}
-                description={product.description}
-                price={product.price}
-                image={product.image}
-              />
-            ))}
-          </div>
+          {products.length === 0 ? (
+            <p style={{ color: "#555" }}>Loading products...</p>
+          ) : (
+            <div
+              style={{
+                display: "grid",
+                gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))",
+                gap: "1.5rem",
+              }}
+            >
+              {products.map((product) => (
+                <ProductCard
+                  key={product.id}
+                  id={product.id}
+                  name={product.name}
+                  description={product.description}
+                  price={product.price}
+                  image={product.image}
+                />
+              ))}
+            </div>
+          )}
         </section>
       </main>
 

@@ -18,7 +18,13 @@ export default async function ProductDetailPage({ params }: Props) {
     return (
       <>
         <Header />
-        <main style={{ padding: "2rem", maxWidth: "1000px", margin: "0 auto" }}>
+        <main
+          style={{
+            padding: "1.5rem",
+            maxWidth: "1000px",
+            margin: "0 auto",
+          }}
+        >
           <h2>Product Not Found</h2>
           <p>The requested product could not be found.</p>
         </main>
@@ -31,11 +37,17 @@ export default async function ProductDetailPage({ params }: Props) {
     <>
       <Header />
 
-      <main style={{ padding: "2rem", maxWidth: "1000px", margin: "0 auto" }}>
+      <main
+        style={{
+          padding: "1.5rem",
+          maxWidth: "1000px",
+          margin: "0 auto",
+        }}
+      >
         <section
           style={{
             display: "grid",
-            gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))",
+            gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))",
             gap: "2rem",
             alignItems: "start",
           }}
@@ -51,7 +63,7 @@ export default async function ProductDetailPage({ params }: Props) {
           <div>
             <h2>{product.name}</h2>
 
-            <p style={{ color: "#555", marginTop: "1rem" }}>
+            <p style={{ color: "#555", marginTop: "1rem", lineHeight: 1.6 }}>
               {product.description}
             </p>
 
@@ -72,7 +84,7 @@ export default async function ProductDetailPage({ params }: Props) {
               </Link>
             </p>
 
-            <p style={{ marginTop: "1.5rem" }}>
+            <p style={{ marginTop: "1.5rem", color: "#555" }}>
               More product details and reviews will be added here later.
             </p>
 
@@ -84,10 +96,10 @@ export default async function ProductDetailPage({ params }: Props) {
                 borderRadius: "8px",
               }}
             >
-              <h3>Loading and API Note</h3>
-              <p style={{ marginTop: "0.5rem", color: "#555" }}>
-                This page is currently using mock data. Loading states and full
-                API integration will be added once the backend is ready.
+              <h3 style={{ marginTop: 0 }}>Loading and API Note</h3>
+              <p style={{ marginTop: "0.5rem", color: "#555", lineHeight: 1.6 }}>
+                This page is currently using mock data. Full API integration and
+                review loading will be added once the backend is ready.
               </p>
             </div>
           </div>
