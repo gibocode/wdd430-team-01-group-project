@@ -59,7 +59,7 @@ export default async function SellerProfilePage({ params }: Props) {
         >
           <div>
             <img
-              src={seller.profileUrl}
+              src={seller.image}
               alt={seller.shopName}
               style={{ width: "100%", borderRadius: "8px" }}
             />
