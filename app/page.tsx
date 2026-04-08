@@ -2,7 +2,7 @@ import Header from "./components/Header";
 import HeroBanner from "./components/HeroBanner";
 import ProductCard from "./components/ProductCard";
 import Footer from "./components/Footer";
-import { fetchProducts } from "@/lib/api/products";
+import { fetchProducts } from "@/lib/services/products";
 
 export default async function Home() {
   const { products, error } = await fetchProducts();

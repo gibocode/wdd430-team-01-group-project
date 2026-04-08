@@ -1,16 +1,6 @@
-import { mockProducts } from "@/app/data/products";
+import { getAllProducts } from "@/models/product";
 import { mapProductToUi, UiProduct } from "@/lib/mappers/product";
-
-type ProductsApiResponse = {
-  success: boolean;
-  data?: Array<{
-    _id?: string;
-    title?: string;
-    description?: string;
-    price?: number;
-    image?: string;
-  }>;
-};
+import { mockProducts } from "@/app/data/products";
 
 export type FetchProductsResult = {
   products: UiProduct[];
@@ -20,24 +10,10 @@ export type FetchProductsResult = {
 
 export async function fetchProducts(): Promise<FetchProductsResult> {
   try {
-    const baseUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3000";
-
-    const response = await fetch(`${baseUrl}/api/products`, {
-      cache: "no-store",
-    });
-
-    if (!response.ok) {
-      throw new Error("Failed to fetch products.");
-    }
-
-    const result: ProductsApiResponse = await response.json();
-
-    if (!result.success || !Array.isArray(result.data)) {
-      throw new Error("Invalid API response.");
-    }
+    const dbProducts = await getAllProducts();
 
     return {
-      products: result.data.map(mapProductToUi),
+      products: dbProducts.map(mapProductToUi),
       error: null,
       usingFallback: false,
     };
