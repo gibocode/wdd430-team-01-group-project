@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 
 type ProductCardProps = {
   id: string;
@@ -31,7 +32,7 @@ export default function ProductCard({
           transition: "transform 0.2s",
         }}
       >
-        <img
+        <Image
           src={image}
           alt={name}
           style={{
