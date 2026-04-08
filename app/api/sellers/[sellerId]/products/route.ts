@@ -5,13 +5,10 @@ import { ObjectId } from "mongodb";
 
 // Product data validation
 const ProductSchema = z.object({
-  sellerId: z.custom<ObjectId>(),
   title: z.string().min(6),
   image: z.string().min(1),
   description: z.string().optional(),
   price: z.number().positive(),
-  createdAt: z.date(),
-  updatedAt: z.date(),
 });
 
 // API to get all products of the seller
@@ -53,12 +50,10 @@ export async function POST(
     // Validate product data
     const validated = ProductSchema.parse(body);
 
-    // Insert seller ID to the product data
-    const data: Product = {
+    // Build product data with server-owned fields
+    const data: Omit<Product, "_id" | "createdAt" | "updatedAt"> = {
       ...validated,
       sellerId: new ObjectId(sellerId),
-      createdAt: new Date(),
-      updatedAt: new Date(),
     };
 
     // Create a product
