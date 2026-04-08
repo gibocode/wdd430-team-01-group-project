@@ -6,7 +6,7 @@ export const mockSellers = [
     tagline: "Handcrafted pieces inspired by everyday beauty.",
     story:
       "Maya creates handmade home decor and accessories with a focus on simple materials, thoughtful details, and designs that bring warmth into everyday spaces.",
-    image: "/placeholder.svg",
+    profileUrl: "/placeholder.svg",
   },
   {
     id: "2",
@@ -15,7 +15,7 @@ export const mockSellers = [
     tagline: "Hand-shaped wooden pieces for daily living.",
     story:
       "Ethan specializes in wooden kitchenware and home pieces. His work emphasizes natural grain, careful finishing, and practical beauty.",
-    image: "/placeholder.svg",
+    profileUrl: "/placeholder.svg",
   },
   {
     id: "3",
@@ -24,6 +24,6 @@ export const mockSellers = [
     tagline: "Soft handmade textiles with modern style.",
     story:
       "Sofia designs handmade scarves, fabric accessories, and wearable pieces that combine comfort, color, and clean design.",
-    image: "/placeholder.svg",
+    profileUrl: "/placeholder.svg",
   },
 ];
