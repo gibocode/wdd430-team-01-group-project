@@ -62,7 +62,9 @@ export default async function SellerProfilePage({ params }: Props) {
             <Image
               src={seller.image}
               alt={seller.shopName}
-              style={{ width: "100%", borderRadius: "8px" }}
+              width={400}
+              height={400}
+              style={{ width: "100%", height: "auto", borderRadius: "8px" }}
             />
           </div>
 
@@ -122,7 +124,7 @@ export default async function SellerProfilePage({ params }: Props) {
                   name={product.name}
                   description={product.description}
                   price={product.price}
-                  image="https://via.placeholder.com/200"
+                  image="/placeholder.svg"
                 />
               ))}
             </div>

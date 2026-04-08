@@ -48,7 +48,7 @@ export async function fetchProducts(): Promise<FetchProductsResult> {
         name: product.name,
         description: product.description,
         price: product.price,
-        image: "https://via.placeholder.com/200",
+        image: "/placeholder.svg",
       })),
       error: "Unable to load live product data. Showing fallback products.",
       usingFallback: true,
