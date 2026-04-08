@@ -5,10 +5,13 @@ import { ObjectId } from 'mongodb';
 
 // Product data validation
 const ProductSchema = z.object({
+    sellerId: z.custom<ObjectId>(),
     title: z.string().min(6),
     image: z.string().min(1),
     description: z.string().optional(),
     price: z.number().positive(),
+    createdAt: z.date(),
+    updatedAt: z.date(),
 });
 
 // API to get all products of the seller

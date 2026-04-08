@@ -2,12 +2,16 @@ import { getAllReviewsByProductId, createReview } from "@/models/review";
 import { z } from 'zod';
 import { Review } from '@/types/review';
 import { ObjectId } from 'mongodb';
+import { validateId } from "@/lib/utils";
 
 // Product review data validation
 const ReviewSchema = z.object({
-    rating: z.number(),
+    productId: z.custom<ObjectId>(),
+    rating: z.number().min(1).max(5),
     reviewer: z.string(),
-    comment: z.string().min(5)
+    comment: z.string().min(5),
+    createdAt: z.date(),
+    updatedAt: z.date(),
 });
 
 // API to get all product reviews
@@ -41,12 +45,14 @@ export async function POST(request: Request, { params }: { params: Promise<{ pro
         const { productId } = await params;
         const body = await request.json();
 
+        const _productId = validateId(productId);
+
         // Validates product review data
         const validated = ReviewSchema.parse(body);
 
         const data: Review = {
             ...validated,
-            productId: new ObjectId(productId),
+            productId: _productId,
             createdAt: new Date(),
             updatedAt: new Date(),
         }
