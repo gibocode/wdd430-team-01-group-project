@@ -12,7 +12,13 @@ type ProductsApiResponse = {
   }>;
 };
 
-export async function fetchProducts(): Promise<UiProduct[]> {
+export type FetchProductsResult = {
+  products: UiProduct[];
+  error: string | null;
+  usingFallback: boolean;
+};
+
+export async function fetchProducts(): Promise<FetchProductsResult> {
   try {
     const response = await fetch("http://localhost:3000/api/products", {
       cache: "no-store",
@@ -28,16 +34,24 @@ export async function fetchProducts(): Promise<UiProduct[]> {
       throw new Error("Invalid API response.");
     }
 
-    return result.data.map(mapProductToUi);
+    return {
+      products: result.data.map(mapProductToUi),
+      error: null,
+      usingFallback: false,
+    };
   } catch (error) {
     console.error("Using mock products fallback:", error);
 
-    return mockProducts.map((product) => ({
-      id: String(product.id),
-      name: product.name,
-      description: product.description,
-      price: product.price,
-      image: "https://via.placeholder.com/200",
-    }));
+    return {
+      products: mockProducts.map((product) => ({
+        id: String(product.id),
+        name: product.name,
+        description: product.description,
+        price: product.price,
+        image: "https://via.placeholder.com/200",
+      })),
+      error: "Unable to load live product data. Showing fallback products.",
+      usingFallback: true,
+    };
   }
 }
