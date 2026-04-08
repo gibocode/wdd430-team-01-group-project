@@ -43,7 +43,6 @@ export async function POST(request: Request): Promise<Response> {
     await createUser({ name, email, password: hashedPassword });
 
     return Response.json({ message: "User successfully created." });
-
   } catch (error) {
     return Response.json({ error: (error as Error).message }, { status: 400 });
   }

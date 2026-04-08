@@ -10,7 +10,7 @@ const ProductSchema = z.object({
   title: z.string().min(6),
   image: z.string().min(1),
   description: z.string().optional(),
-  price: z.number().positive()
+  price: z.number().positive(),
 });
 
 // API to get single product by ID
