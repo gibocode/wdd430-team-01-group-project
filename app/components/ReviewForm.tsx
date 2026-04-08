@@ -17,7 +17,11 @@ export default function ReviewForm() {
   if (!isLoggedIn) {
     return (
       <p style={{ color: "#555", marginTop: "1rem" }}>
-        Please <a href="/login" style={{ color: "#1976D2" }}>log in</a> to leave a review.
+        Please{" "}
+        <a href="/login" style={{ color: "#1976D2" }}>
+          log in
+        </a>{" "}
+        to leave a review.
       </p>
     );
   }
@@ -32,7 +36,9 @@ export default function ReviewForm() {
         }}
       >
         <label>
-          <span style={{ display: "block", marginBottom: "0.5rem" }}>Rating</span>
+          <span style={{ display: "block", marginBottom: "0.5rem" }}>
+            Rating
+          </span>
           <select
             value={rating}
             onChange={(e) => setRating(e.target.value)}
@@ -47,7 +53,9 @@ export default function ReviewForm() {
         </label>
 
         <label>
-          <span style={{ display: "block", marginBottom: "0.5rem" }}>Review</span>
+          <span style={{ display: "block", marginBottom: "0.5rem" }}>
+            Review
+          </span>
           <textarea
             value={text}
             onChange={(e) => setText(e.target.value)}

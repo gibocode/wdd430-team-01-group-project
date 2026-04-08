@@ -111,7 +111,9 @@ export default async function ProductDetailPage({ params }: Props) {
 
           {averageRating ? (
             <p style={{ color: "#555", marginTop: "0.5rem" }}>
-              Average rating: <strong>{averageRating}</strong> / 5 ({productReviews.length} review{productReviews.length !== 1 ? "s" : ""})
+              Average rating: <strong>{averageRating}</strong> / 5 (
+              {productReviews.length} review
+              {productReviews.length !== 1 ? "s" : ""})
             </p>
           ) : (
             <p style={{ color: "#555", marginTop: "0.5rem" }}>
@@ -143,10 +145,22 @@ export default async function ProductDetailPage({ params }: Props) {
                     <p style={{ margin: 0, fontWeight: "bold" }}>
                       {review.user || "User"} · {review.rating}/5
                     </p>
-                    <p style={{ color: "#777", fontSize: "0.9rem", marginTop: "0.25rem" }}>
+                    <p
+                      style={{
+                        color: "#777",
+                        fontSize: "0.9rem",
+                        marginTop: "0.25rem",
+                      }}
+                    >
                       {review.date}
                     </p>
-                    <p style={{ marginTop: "0.75rem", color: "#555", lineHeight: 1.6 }}>
+                    <p
+                      style={{
+                        marginTop: "0.75rem",
+                        color: "#555",
+                        lineHeight: 1.6,
+                      }}
+                    >
                       {review.text}
                     </p>
                   </article>
