@@ -16,15 +16,16 @@ export default async function ProductDetailPage({ params }: Props) {
   const { id } = await params;
 
   const [{ product, error: productError }, { reviews, error: reviewsError }] =
-    await Promise.all([fetchProductById(id), fetchReviewsByProductId(id)]);
+    await Promise.all([
+      fetchProductById(id),
+      fetchReviewsByProductId(id),
+    ]);
 
   if (!product) {
     return (
       <>
         <Header />
-        <main
-          style={{ padding: "1.5rem", maxWidth: "1000px", margin: "0 auto" }}
-        >
+        <main style={{ padding: "1.5rem", maxWidth: "1000px", margin: "0 auto" }}>
           <h2>Product Not Found</h2>
           <p>{productError || "The requested product could not be found."}</p>
         </main>
@@ -36,8 +37,7 @@ export default async function ProductDetailPage({ params }: Props) {
   const averageRating =
     reviews.length > 0
       ? (
-          reviews.reduce((sum, review) => sum + review.rating, 0) /
-          reviews.length
+          reviews.reduce((sum, review) => sum + review.rating, 0) / reviews.length
         ).toFixed(1)
       : null;
 
@@ -99,13 +99,7 @@ export default async function ProductDetailPage({ params }: Props) {
               {product.description}
             </p>
 
-            <p
-              style={{
-                fontWeight: "bold",
-                fontSize: "1.25rem",
-                marginTop: "1rem",
-              }}
-            >
+            <p style={{ fontWeight: "bold", fontSize: "1.25rem", marginTop: "1rem" }}>
               {product.price}
             </p>
 
@@ -126,27 +120,18 @@ export default async function ProductDetailPage({ params }: Props) {
 
           {averageRating ? (
             <p style={{ color: "#555", marginTop: "0.5rem" }}>
-              Average rating: <strong>{averageRating}</strong> / 5 (
-              {reviews.length} review
+              Average rating: <strong>{averageRating}</strong> / 5 ({reviews.length} review
               {reviews.length !== 1 ? "s" : ""})
             </p>
           ) : (
-            <p style={{ color: "#555", marginTop: "0.5rem" }}>
-              No reviews yet.
-            </p>
+            <p style={{ color: "#555", marginTop: "0.5rem" }}>No reviews yet.</p>
           )}
 
           <div style={{ marginTop: "1.5rem" }}>
             {reviews.length === 0 ? (
               <p style={{ color: "#555" }}>Be the first to leave a review.</p>
             ) : (
-              <div
-                style={{
-                  display: "flex",
-                  flexDirection: "column",
-                  gap: "1rem",
-                }}
-              >
+              <div style={{ display: "flex", flexDirection: "column", gap: "1rem" }}>
                 {reviews.map((review) => (
                   <article
                     key={review.id}

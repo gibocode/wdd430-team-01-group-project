@@ -14,7 +14,9 @@ function parsePrice(price: string): number {
   return Number(price.replace(/[^0-9.]/g, ""));
 }
 
-export default async function CatalogPage({ searchParams }: CatalogPageProps) {
+export default async function CatalogPage({
+  searchParams,
+}: CatalogPageProps) {
   const params = await searchParams;
   const { products, error } = await fetchProducts();
 
@@ -42,11 +44,15 @@ export default async function CatalogPage({ searchParams }: CatalogPageProps) {
   }
 
   if (params.sort === "low-high") {
-    filteredProducts.sort((a, b) => parsePrice(a.price) - parsePrice(b.price));
+    filteredProducts.sort(
+      (a, b) => parsePrice(a.price) - parsePrice(b.price),
+    );
   }
 
   if (params.sort === "high-low") {
-    filteredProducts.sort((a, b) => parsePrice(b.price) - parsePrice(a.price));
+    filteredProducts.sort(
+      (a, b) => parsePrice(b.price) - parsePrice(a.price),
+    );
   }
 
   return (

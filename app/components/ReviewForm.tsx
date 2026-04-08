@@ -6,6 +6,11 @@ import { useRouter } from "next/navigation";
 type ReviewFormProps = {
   productId: string;
 };
+import { useRouter } from "next/navigation";
+
+type ReviewFormProps = {
+  productId: string;
+};
 
 export default function ReviewForm({ productId }: ReviewFormProps) {
   const [rating, setRating] = useState("5");
@@ -65,12 +70,14 @@ export default function ReviewForm({ productId }: ReviewFormProps) {
   return (
     <form onSubmit={handleSubmit} style={{ marginTop: "1rem" }}>
       <div style={{ display: "flex", flexDirection: "column", gap: "1rem" }}>
-        {error && <p style={{ color: "#b00020", margin: 0 }}>{error}</p>}
+        {error && (
+          <p style={{ color: "#b00020", margin: 0 }}>
+            {error}
+          </p>
+        )}
 
         <label>
-          <span style={{ display: "block", marginBottom: "0.5rem" }}>
-            Rating
-          </span>
+          <span style={{ display: "block", marginBottom: "0.5rem" }}>Rating</span>
           <select
             value={rating}
             onChange={(e) => setRating(e.target.value)}
@@ -85,9 +92,7 @@ export default function ReviewForm({ productId }: ReviewFormProps) {
         </label>
 
         <label>
-          <span style={{ display: "block", marginBottom: "0.5rem" }}>
-            Review
-          </span>
+          <span style={{ display: "block", marginBottom: "0.5rem" }}>Review</span>
           <textarea
             value={text}
             onChange={(e) => setText(e.target.value)}
