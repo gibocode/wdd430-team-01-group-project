@@ -79,7 +79,7 @@ export default async function ProductDetailPage({ params }: Props) {
 
             <p style={{ marginTop: "1rem" }}>
               Seller:{" "}
-              <Link href="/sellers" style={{ color: "#1976D2" }}>
+              <Link href={`/sellers/${product.sellerId}`} style={{ color: "#1976D2" }}>
                 View seller profile
               </Link>
             </p>
