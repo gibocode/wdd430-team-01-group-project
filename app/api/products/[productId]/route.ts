@@ -1,13 +1,16 @@
 import { findProductById, updateProduct, deleteProductById } from '@/models/product';
+import { ObjectId } from 'mongodb';
 import { z } from 'zod';
 
 // Product data validation
 const ProductSchema = z.object({
+    sellerId: z.custom<ObjectId>(),
     title: z.string().min(6),
-    reviewer: z.string(),
     image: z.string().min(1),
     description: z.string().optional(),
     price: z.number().positive(),
+    createdAt: z.date(),
+    updatedAt: z.date(),
 });
 
 // API to get single product by ID
@@ -15,6 +18,12 @@ export async function GET(request: Request, { params }: { params: Promise<{ prod
     try {
         const { productId } = await params;
         const product = await findProductById(productId);
+        if (!product) {
+            return Response.json({
+                success: false,
+                message: 'Product not found.',
+            }, { status: 404 });
+        }
         return Response.json({
             success: true,
             data: product,
@@ -42,7 +51,7 @@ export async function PUT(request: Request, { params }: { params: Promise<{ prod
         const validated = ProductSchema.parse(body);
 
         // Update product by ID
-        const success = updateProduct(productId, validated);
+        const success = await updateProduct(productId, validated);
 
         return Response.json({
             success: success,
