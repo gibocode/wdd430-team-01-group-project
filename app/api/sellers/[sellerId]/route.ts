@@ -8,8 +8,6 @@ const SellerSchema = z.object({
   tagline: z.string().min(5),
   story: z.string().min(10),
   profileUrl: z.string().min(5).optional(),
-  createdAt: z.date(),
-  updatedAt: z.date(),
 });
 
 // API to get seller info
