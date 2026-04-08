@@ -1,8 +1,10 @@
 import Link from "next/link";
+import Image from "next/image";
 import Header from "../../components/Header";
 import Footer from "../../components/Footer";
+import ReviewForm from "../../components/ReviewForm";
 import { mockProducts } from "../../data/products";
-import Image from "next/image";
+import { mockReviews } from "../../data/reviews";
 
 type Props = {
   params: Promise<{
@@ -33,6 +35,18 @@ export default async function ProductDetailPage({ params }: Props) {
       </>
     );
   }
+
+  const productReviews = mockReviews.filter(
+    (review) => review.productId === product.id,
+  );
+
+  const averageRating =
+    productReviews.length > 0
+      ? (
+          productReviews.reduce((sum, review) => sum + review.rating, 0) /
+          productReviews.length
+        ).toFixed(1)
+      : null;
 
   return (
     <>
@@ -89,28 +103,69 @@ export default async function ProductDetailPage({ params }: Props) {
                 View seller profile
               </Link>
             </p>
-
-            <p style={{ marginTop: "1.5rem", color: "#555" }}>
-              More product details and reviews will be added here later.
-            </p>
-
-            <div
-              style={{
-                marginTop: "2rem",
-                padding: "1rem",
-                backgroundColor: "#f5f5f5",
-                borderRadius: "8px",
-              }}
-            >
-              <h3 style={{ marginTop: 0 }}>Loading and API Note</h3>
-              <p
-                style={{ marginTop: "0.5rem", color: "#555", lineHeight: 1.6 }}
-              >
-                This page is currently using mock data. Full API integration and
-                review loading will be added once the backend is ready.
-              </p>
-            </div>
           </div>
+        </section>
+
+        <section style={{ marginTop: "3rem" }}>
+          <h3>Reviews</h3>
+
+          {averageRating ? (
+            <p style={{ color: "#555", marginTop: "0.5rem" }}>
+              Average rating: <strong>{averageRating}</strong> / 5 ({productReviews.length} review{productReviews.length !== 1 ? "s" : ""})
+            </p>
+          ) : (
+            <p style={{ color: "#555", marginTop: "0.5rem" }}>
+              No reviews yet.
+            </p>
+          )}
+
+          <div style={{ marginTop: "1.5rem" }}>
+            {productReviews.length === 0 ? (
+              <p style={{ color: "#555" }}>Be the first to leave a review.</p>
+            ) : (
+              <div
+                style={{
+                  display: "flex",
+                  flexDirection: "column",
+                  gap: "1rem",
+                }}
+              >
+                {productReviews.map((review) => (
+                  <article
+                    key={review.id}
+                    style={{
+                      border: "1px solid #ddd",
+                      borderRadius: "8px",
+                      padding: "1rem",
+                      backgroundColor: "#fff",
+                    }}
+                  >
+                    <p style={{ margin: 0, fontWeight: "bold" }}>
+                      {review.user || "User"} · {review.rating}/5
+                    </p>
+                    <p style={{ color: "#777", fontSize: "0.9rem", marginTop: "0.25rem" }}>
+                      {review.date}
+                    </p>
+                    <p style={{ marginTop: "0.75rem", color: "#555", lineHeight: 1.6 }}>
+                      {review.text}
+                    </p>
+                  </article>
+                ))}
+              </div>
+            )}
+          </div>
+        </section>
+
+        <section
+          style={{
+            marginTop: "3rem",
+            padding: "1rem",
+            backgroundColor: "#f5f5f5",
+            borderRadius: "8px",
+          }}
+        >
+          <h3 style={{ marginTop: 0 }}>Leave a Review</h3>
+          <ReviewForm />
         </section>
       </main>
 
