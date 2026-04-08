@@ -35,8 +35,11 @@ export default function ProductCard({
         <Image
           src={image}
           alt={name}
+          width={200}
+          height={200}
           style={{
             width: "100%",
+            height: "auto",
             borderRadius: "6px",
             marginBottom: "0.5rem",
           }}

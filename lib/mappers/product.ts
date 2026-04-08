@@ -23,6 +23,6 @@ export function mapProductToUi(product: BackendProduct): UiProduct {
       typeof product.price === "number"
         ? `$${product.price.toFixed(2)}`
         : "$0.00",
-    image: product.image || "https://via.placeholder.com/200",
+    image: product.image || "/placeholder.svg",
   };
 }

@@ -55,9 +55,11 @@ export default async function ProductDetailPage({ params }: Props) {
         >
           <div>
             <Image
-              src="https://via.placeholder.com/400"
+              src="/placeholder.svg"
               alt={product.name}
-              style={{ width: "100%", borderRadius: "8px" }}
+              width={400}
+              height={400}
+              style={{ width: "100%", height: "auto", borderRadius: "8px" }}
             />
           </div>
 
