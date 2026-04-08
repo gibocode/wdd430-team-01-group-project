@@ -60,7 +60,7 @@ export default async function SellerProfilePage({ params }: Props) {
         >
           <div>
             <Image
-              src={seller.image}
+              src={seller.profileUrl ?? "/placeholder.svg"}
               alt={seller.shopName}
               width={400}
               height={400}

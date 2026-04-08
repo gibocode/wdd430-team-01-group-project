@@ -9,11 +9,23 @@ const getDbClient = () => {
   if (!uri) {
     throw new Error("Database URI not set.");
   }
+
   if (!dbClient) {
     client = new MongoClient(uri);
-    dbClient = client.connect();
-    console.log("Database connected.");
+
+    dbClient = client
+      .connect()
+      .then((connectedClient) => {
+        console.log("Database connected.");
+        return connectedClient;
+      })
+      .catch((error) => {
+        console.error("Database connection failed:", error);
+        dbClient = null;
+        throw error;
+      });
   }
+
   return dbClient;
 };
 

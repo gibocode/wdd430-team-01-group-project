@@ -20,7 +20,9 @@ export type FetchProductsResult = {
 
 export async function fetchProducts(): Promise<FetchProductsResult> {
   try {
-    const response = await fetch("http://localhost:3000/api/products", {
+    const baseUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3000";
+
+    const response = await fetch(`${baseUrl}/api/products`, {
       cache: "no-store",
     });
 
