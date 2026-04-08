@@ -1,17 +1,53 @@
 "use client";
 
 import { FormEvent, useState } from "react";
+import { useRouter } from "next/navigation";
 
-export default function ReviewForm() {
+type ReviewFormProps = {
+  productId: string;
+};
+
+export default function ReviewForm({ productId }: ReviewFormProps) {
   const [rating, setRating] = useState("5");
   const [text, setText] = useState("");
-  const isLoggedIn = false; // temporary mock state
+  const [error, setError] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const router = useRouter();
 
-  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
+  const isLoggedIn = false; // replace later with real auth state
+
+  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    console.log("Mock review submitted:", { rating, text });
-    setText("");
-    setRating("5");
+    setError("");
+    setIsSubmitting(true);
+
+    try {
+      const response = await fetch(`/api/products/${productId}/reviews`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          rating: Number(rating),
+          reviewer: "User",
+          comment: text,
+        }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.message || "Failed to submit review.");
+      }
+
+      setText("");
+      setRating("5");
+      router.refresh();
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Something went wrong.");
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   if (!isLoggedIn) {
@@ -28,17 +64,15 @@ export default function ReviewForm() {
 
   return (
     <form onSubmit={handleSubmit} style={{ marginTop: "1rem" }}>
-      <div
-        style={{
-          display: "flex",
-          flexDirection: "column",
-          gap: "1rem",
-        }}
-      >
+      <div style={{ display: "flex", flexDirection: "column", gap: "1rem" }}>
+        {error && (
+          <p style={{ color: "#b00020", margin: 0 }}>
+            {error}
+          </p>
+        )}
+
         <label>
-          <span style={{ display: "block", marginBottom: "0.5rem" }}>
-            Rating
-          </span>
+          <span style={{ display: "block", marginBottom: "0.5rem" }}>Rating</span>
           <select
             value={rating}
             onChange={(e) => setRating(e.target.value)}
@@ -53,9 +87,7 @@ export default function ReviewForm() {
         </label>
 
         <label>
-          <span style={{ display: "block", marginBottom: "0.5rem" }}>
-            Review
-          </span>
+          <span style={{ display: "block", marginBottom: "0.5rem" }}>Review</span>
           <textarea
             value={text}
             onChange={(e) => setText(e.target.value)}
@@ -73,6 +105,7 @@ export default function ReviewForm() {
 
         <button
           type="submit"
+          disabled={isSubmitting}
           style={{
             padding: "0.75rem 1rem",
             backgroundColor: "#1976D2",
@@ -81,9 +114,10 @@ export default function ReviewForm() {
             borderRadius: "6px",
             cursor: "pointer",
             width: "fit-content",
+            opacity: isSubmitting ? 0.7 : 1,
           }}
         >
-          Submit Review
+          {isSubmitting ? "Submitting..." : "Submit Review"}
         </button>
       </div>
     </form>

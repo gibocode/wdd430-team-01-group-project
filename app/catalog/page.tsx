@@ -3,8 +3,57 @@ import ProductCard from "../components/ProductCard";
 import Footer from "../components/Footer";
 import { fetchProducts } from "@/lib/services/products";
 
-export default async function CatalogPage() {
+type CatalogPageProps = {
+  searchParams: Promise<{
+    price?: string;
+    sort?: string;
+  }>;
+};
+
+function parsePrice(price: string): number {
+  return Number(price.replace(/[^0-9.]/g, ""));
+}
+
+export default async function CatalogPage({
+  searchParams,
+}: CatalogPageProps) {
+  const params = await searchParams;
   const { products, error } = await fetchProducts();
+
+  let filteredProducts = [...products];
+
+  if (params.price === "0-20") {
+    filteredProducts = filteredProducts.filter((product) => {
+      const value = parsePrice(product.price);
+      return value >= 0 && value <= 20;
+    });
+  }
+
+  if (params.price === "21-50") {
+    filteredProducts = filteredProducts.filter((product) => {
+      const value = parsePrice(product.price);
+      return value >= 21 && value <= 50;
+    });
+  }
+
+  if (params.price === "51+") {
+    filteredProducts = filteredProducts.filter((product) => {
+      const value = parsePrice(product.price);
+      return value >= 51;
+    });
+  }
+
+  if (params.sort === "low-high") {
+    filteredProducts.sort(
+      (a, b) => parsePrice(a.price) - parsePrice(b.price),
+    );
+  }
+
+  if (params.sort === "high-low") {
+    filteredProducts.sort(
+      (a, b) => parsePrice(b.price) - parsePrice(a.price),
+    );
+  }
 
   return (
     <>
@@ -46,62 +95,80 @@ export default async function CatalogPage() {
             marginTop: "1.5rem",
           }}
         >
-          <select
-            defaultValue=""
+          <form
+            method="GET"
             style={{
-              padding: "0.5rem",
-              borderRadius: "4px",
-              minWidth: "180px",
-              flex: "1 1 180px",
+              display: "flex",
+              gap: "1rem",
+              flexWrap: "wrap",
+              width: "100%",
             }}
           >
-            <option value="" disabled>
-              Filter by category
-            </option>
-            <option value="ceramics">Ceramics</option>
-            <option value="clothing">Clothing</option>
-            <option value="jewelry">Jewelry</option>
-            <option value="home">Home Decor</option>
-          </select>
+            <select
+              name="price"
+              defaultValue={params.price ?? ""}
+              style={{
+                padding: "0.5rem",
+                borderRadius: "4px",
+                minWidth: "180px",
+                flex: "1 1 180px",
+              }}
+            >
+              <option value="">Filter by price</option>
+              <option value="0-20">$0 - $20</option>
+              <option value="21-50">$21 - $50</option>
+              <option value="51+">$51+</option>
+            </select>
 
-          <select
-            defaultValue=""
-            style={{
-              padding: "0.5rem",
-              borderRadius: "4px",
-              minWidth: "180px",
-              flex: "1 1 180px",
-            }}
-          >
-            <option value="" disabled>
-              Filter by price
-            </option>
-            <option value="0-20">$0 - $20</option>
-            <option value="21-50">$21 - $50</option>
-            <option value="51+">$51+</option>
-          </select>
+            <select
+              name="sort"
+              defaultValue={params.sort ?? ""}
+              style={{
+                padding: "0.5rem",
+                borderRadius: "4px",
+                minWidth: "180px",
+                flex: "1 1 180px",
+              }}
+            >
+              <option value="">Sort by</option>
+              <option value="low-high">Price: Low to High</option>
+              <option value="high-low">Price: High to Low</option>
+            </select>
 
-          <select
-            defaultValue=""
-            style={{
-              padding: "0.5rem",
-              borderRadius: "4px",
-              minWidth: "180px",
-              flex: "1 1 180px",
-            }}
-          >
-            <option value="" disabled>
-              Sort by
-            </option>
-            <option value="newest">Newest</option>
-            <option value="low-high">Price: Low to High</option>
-            <option value="high-low">Price: High to Low</option>
-          </select>
+            <button
+              type="submit"
+              style={{
+                padding: "0.5rem 1rem",
+                borderRadius: "4px",
+                border: "1px solid #ccc",
+                backgroundColor: "#fff",
+                cursor: "pointer",
+              }}
+            >
+              Apply
+            </button>
+
+            <a
+              href="/catalog"
+              style={{
+                display: "inline-flex",
+                alignItems: "center",
+                padding: "0.5rem 1rem",
+                borderRadius: "4px",
+                border: "1px solid #ccc",
+                textDecoration: "none",
+                color: "inherit",
+                backgroundColor: "#fff",
+              }}
+            >
+              Clear
+            </a>
+          </form>
         </section>
 
         <section style={{ marginTop: "2rem" }}>
-          {products.length === 0 ? (
-            <p style={{ color: "#555" }}>Loading products...</p>
+          {filteredProducts.length === 0 ? (
+            <p style={{ color: "#555" }}>No products found.</p>
           ) : (
             <div
               style={{
@@ -110,7 +177,7 @@ export default async function CatalogPage() {
                 gap: "1.5rem",
               }}
             >
-              {products.map((product) => (
+              {filteredProducts.map((product) => (
                 <ProductCard
                   key={product.id}
                   id={product.id}
