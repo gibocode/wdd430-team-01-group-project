@@ -1,7 +1,7 @@
 import { ObjectId } from 'mongodb';
 
 export interface Seller {
-    userId: ObjectId;
+    sellerId: ObjectId;
     sellerName: string;
     shopName: string;
     tagline: string;

@@ -1,14 +1,8 @@
-import getDbClient from '@/lib/mongodb';
-import { ObjectId } from 'mongodb';
+import getDatabase from '@/lib/mongodb';
 import { Seller } from '@/types/seller';
+import { validateId } from '@/lib/utils';
 
 const COLLECTION = 'sellers';
-
-// Get database client
-const getDatabase = async () => {
-    const client = await getDbClient();
-    return client.db(process.env.MONGODB_DB);
-}
 
 // Get database collection
 const getCollection = async () => {
@@ -24,8 +18,9 @@ export async function getAllSellers() {
 
 // Get single seller by ID
 export async function findSellerById(id: string) {
+    const _id = validateId(id);
     const collection = await getCollection();
-    return collection.findOne({ userId: new ObjectId(id) });
+    return collection.findOne({ sellerId: _id });
 }
 
 // Create new seller
@@ -42,9 +37,10 @@ export async function createSeller(props: Omit<Seller, 'createdAt' | 'updatedAt'
 
 // Update seller info
 export async function updateSellerInfo(id: string, props: Partial<Seller>): Promise<boolean> {
+    const _id = validateId(id);
     const collection = await getCollection();
     const result = await collection.updateOne(
-        { userId: new ObjectId(id) },
+        { sellerId: _id },
         {
             $set: {
                 ...props,
@@ -57,7 +53,8 @@ export async function updateSellerInfo(id: string, props: Partial<Seller>): Prom
 
 // Delete seller by ID
 export async function deleteSellerById(id: string): Promise<boolean> {
+    const _id = validateId(id);
     const collection = await getCollection();
-    const result = await collection.deleteOne({ userId: new ObjectId(id) });
+    const result = await collection.deleteOne({ sellerId: _id });
     return result.deletedCount > 0;
 }
