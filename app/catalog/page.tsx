@@ -1,15 +1,16 @@
 import Header from "../components/Header";
 import ProductCard from "../components/ProductCard";
 import Footer from "../components/Footer";
-import { mockProducts } from "../data/products";
+import { fetchProducts } from "@/lib/api/products";
 
-export default function CatalogPage() {
+export default async function CatalogPage() {
+  const products = await fetchProducts();
+
   return (
     <>
       <Header />
 
       <main style={{ padding: "2rem", maxWidth: "1000px", margin: "0 auto" }}>
-        {/* Page Header */}
         <section>
           <h2>Catalog</h2>
           <p style={{ color: "#555" }}>
@@ -17,7 +18,6 @@ export default function CatalogPage() {
           </p>
         </section>
 
-        {/* Filters */}
         <section
           style={{
             display: "flex",
@@ -64,7 +64,6 @@ export default function CatalogPage() {
           </select>
         </section>
 
-        {/* Product Grid */}
         <section style={{ marginTop: "2rem" }}>
           <div
             style={{
@@ -73,13 +72,14 @@ export default function CatalogPage() {
               gap: "1.5rem",
             }}
           >
-            {mockProducts.map((product) => (
+            {products.map((product) => (
               <ProductCard
                 key={product.id}
                 id={product.id}
                 name={product.name}
                 description={product.description}
                 price={product.price}
+                image={product.image}
               />
             ))}
           </div>
