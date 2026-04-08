@@ -2,6 +2,7 @@ import Link from "next/link";
 import Header from "../../components/Header";
 import Footer from "../../components/Footer";
 import { mockProducts } from "../../data/products";
+import Image from "next/image";
 
 type Props = {
   params: Promise<{
@@ -53,7 +54,7 @@ export default async function ProductDetailPage({ params }: Props) {
           }}
         >
           <div>
-            <img
+            <Image
               src="https://via.placeholder.com/400"
               alt={product.name}
               style={{ width: "100%", borderRadius: "8px" }}
@@ -79,7 +80,10 @@ export default async function ProductDetailPage({ params }: Props) {
 
             <p style={{ marginTop: "1rem" }}>
               Seller:{" "}
-              <Link href={`/sellers/${product.sellerId}`} style={{ color: "#1976D2" }}>
+              <Link
+                href={`/sellers/${product.sellerId}`}
+                style={{ color: "#1976D2" }}
+              >
                 View seller profile
               </Link>
             </p>
@@ -97,7 +101,9 @@ export default async function ProductDetailPage({ params }: Props) {
               }}
             >
               <h3 style={{ marginTop: 0 }}>Loading and API Note</h3>
-              <p style={{ marginTop: "0.5rem", color: "#555", lineHeight: 1.6 }}>
+              <p
+                style={{ marginTop: "0.5rem", color: "#555", lineHeight: 1.6 }}
+              >
                 This page is currently using mock data. Full API integration and
                 review loading will be added once the backend is ready.
               </p>

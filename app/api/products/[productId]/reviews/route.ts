@@ -1,79 +1,83 @@
 import { getAllReviewsByProductId, createReview } from "@/models/review";
-import { z } from 'zod';
-import { Review } from '@/types/review';
-import { ObjectId } from 'mongodb';
+import { z } from "zod";
+import { Review } from "@/types/review";
+import { ObjectId } from "mongodb";
 import { validateId } from "@/lib/utils";
 
 // Product review data validation
 const ReviewSchema = z.object({
-    productId: z.custom<ObjectId>(),
-    rating: z.number().min(1).max(5),
-    reviewer: z.string(),
-    comment: z.string().min(5),
-    createdAt: z.date(),
-    updatedAt: z.date(),
+  productId: z.custom<ObjectId>(),
+  rating: z.number().min(1).max(5),
+  reviewer: z.string(),
+  comment: z.string().min(5),
+  createdAt: z.date(),
+  updatedAt: z.date(),
 });
 
 // API to get all product reviews
-export async function GET(request: Request, { params }: { params : Promise<{ productId: string }> }): Promise<Response> {
-    try {
-        const { productId } = await params;
+export async function GET(
+  request: Request,
+  { params }: { params: Promise<{ productId: string }> },
+): Promise<Response> {
+  try {
+    const { productId } = await params;
 
-        // Get all product reviews
-        const reviews = await getAllReviewsByProductId(productId);
+    // Get all product reviews
+    const reviews = await getAllReviewsByProductId(productId);
 
-        return Response.json({
-            success: true,
-            data: reviews
-        });
-    }
-    catch (error) {
-        console.error(error);
-        return Response.json(
-            {
-                success: false,
-                message: 'Failed to fetch product reviews.',
-            },
-            { status: 500 }
-        );
-    }
+    return Response.json({
+      success: true,
+      data: reviews,
+    });
+  } catch (error) {
+    console.error(error);
+    return Response.json(
+      {
+        success: false,
+        message: "Failed to fetch product reviews.",
+      },
+      { status: 500 },
+    );
+  }
 }
 
 // API to create a product review
-export async function POST(request: Request, { params }: { params: Promise<{ productId: string }>}): Promise<Response> {
-    try {
-        const { productId } = await params;
-        const body = await request.json();
+export async function POST(
+  request: Request,
+  { params }: { params: Promise<{ productId: string }> },
+): Promise<Response> {
+  try {
+    const { productId } = await params;
+    const body = await request.json();
 
-        const _productId = validateId(productId);
+    const _productId = validateId(productId);
 
-        // Validates product review data
-        const validated = ReviewSchema.parse(body);
+    // Validates product review data
+    const validated = ReviewSchema.parse(body);
 
-        const data: Review = {
-            ...validated,
-            productId: _productId,
-            createdAt: new Date(),
-            updatedAt: new Date(),
-        }
+    const data: Review = {
+      ...validated,
+      productId: _productId,
+      createdAt: new Date(),
+      updatedAt: new Date(),
+    };
 
-        // Creates product review
-        const review = await createReview(data);
+    // Creates product review
+    const review = await createReview(data);
 
-        return Response.json({
-            success: true,
-            message: 'Product review successfully created.',
-            data: review
-        });
-    }
-    catch (error) {
-        console.error(error);
-        return Response.json(
-            {
-                success: false,
-                message: 'Failed to create a product review.',
-            },
-            { status: 500 }
-        );
-    }
+    return Response.json({
+      success: true,
+      message: "Product review successfully created.",
+      data: review,
+    });
+  } catch (error) {
+    console.error(error);
+    return Response.json(
+      {
+        success: false,
+        message: "Failed to create a product review.",
+      },
+      { status: 500 },
+    );
+  }
 }

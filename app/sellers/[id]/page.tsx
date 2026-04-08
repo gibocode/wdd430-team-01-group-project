@@ -3,6 +3,7 @@ import Footer from "../../components/Footer";
 import ProductCard from "../../components/ProductCard";
 import { mockProducts } from "../../data/products";
 import { mockSellers } from "../../data/sellers";
+import Image from "next/image";
 
 type Props = {
   params: Promise<{
@@ -35,7 +36,7 @@ export default async function SellerProfilePage({ params }: Props) {
   }
 
   const sellerProducts = mockProducts.filter(
-    (product) => product.sellerId === seller.id
+    (product) => product.sellerId === seller.id,
   );
 
   return (
@@ -58,7 +59,7 @@ export default async function SellerProfilePage({ params }: Props) {
           }}
         >
           <div>
-            <img
+            <Image
               src={seller.image}
               alt={seller.shopName}
               style={{ width: "100%", borderRadius: "8px" }}
