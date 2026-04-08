@@ -13,7 +13,8 @@ const getDbClient = () => {
   if (!dbClient) {
     client = new MongoClient(uri);
 
-    dbClient = client.connect()
+    dbClient = client
+      .connect()
       .then((connectedClient) => {
         console.log("Database connected.");
         return connectedClient;
