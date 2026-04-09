@@ -1,3 +1,5 @@
+import { ObjectId } from "mongodb";
+
 export type UiProduct = {
   id: string;
   name: string;
@@ -7,7 +9,7 @@ export type UiProduct = {
 };
 
 type BackendProduct = {
-  _id?: string;
+  _id?: ObjectId;
   title?: string;
   description?: string;
   price?: number;
@@ -16,7 +18,7 @@ type BackendProduct = {
 
 export function mapProductToUi(product: BackendProduct): UiProduct {
   return {
-    id: product._id ?? "",
+    id: product._id?.toString() ?? "",
     name: product.title ?? "Untitled Product",
     description: product.description ?? "",
     price:
