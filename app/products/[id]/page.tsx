@@ -3,8 +3,8 @@ import Image from "next/image";
 import Header from "../../components/Header";
 import Footer from "../../components/Footer";
 import ReviewForm from "../../components/ReviewForm";
-import { mockProducts } from "../../data/products";
-import { mockReviews } from "../../data/reviews";
+import { fetchProductById } from "@/lib/services/product-detail";
+import { fetchReviewsByProductId } from "@/lib/services/reviews";
 
 type Props = {
   params: Promise<{
@@ -15,36 +15,29 @@ type Props = {
 export default async function ProductDetailPage({ params }: Props) {
   const { id } = await params;
 
-  const product = mockProducts.find((item) => item.id === Number(id));
+  const [{ product, error: productError }, { reviews, error: reviewsError }] =
+    await Promise.all([fetchProductById(id), fetchReviewsByProductId(id)]);
 
   if (!product) {
     return (
       <>
         <Header />
         <main
-          style={{
-            padding: "1.5rem",
-            maxWidth: "1000px",
-            margin: "0 auto",
-          }}
+          style={{ padding: "1.5rem", maxWidth: "1000px", margin: "0 auto" }}
         >
           <h2>Product Not Found</h2>
-          <p>The requested product could not be found.</p>
+          <p>{productError || "The requested product could not be found."}</p>
         </main>
         <Footer />
       </>
     );
   }
 
-  const productReviews = mockReviews.filter(
-    (review) => review.productId === product.id,
-  );
-
   const averageRating =
-    productReviews.length > 0
+    reviews.length > 0
       ? (
-          productReviews.reduce((sum, review) => sum + review.rating, 0) /
-          productReviews.length
+          reviews.reduce((sum, review) => sum + review.rating, 0) /
+          reviews.length
         ).toFixed(1)
       : null;
 
@@ -52,13 +45,35 @@ export default async function ProductDetailPage({ params }: Props) {
     <>
       <Header />
 
-      <main
-        style={{
-          padding: "1.5rem",
-          maxWidth: "1000px",
-          margin: "0 auto",
-        }}
-      >
+      <main style={{ padding: "1.5rem", maxWidth: "1000px", margin: "0 auto" }}>
+        {productError && (
+          <p
+            style={{
+              marginBottom: "1rem",
+              padding: "0.75rem 1rem",
+              backgroundColor: "#fff4e5",
+              color: "#8a5a00",
+              borderRadius: "6px",
+            }}
+          >
+            {productError}
+          </p>
+        )}
+
+        {reviewsError && (
+          <p
+            style={{
+              marginBottom: "1rem",
+              padding: "0.75rem 1rem",
+              backgroundColor: "#fff4e5",
+              color: "#8a5a00",
+              borderRadius: "6px",
+            }}
+          >
+            {reviewsError}
+          </p>
+        )}
+
         <section
           style={{
             display: "grid",
@@ -69,7 +84,7 @@ export default async function ProductDetailPage({ params }: Props) {
         >
           <div>
             <Image
-              src="/placeholder.svg"
+              src={product.image}
               alt={product.name}
               width={400}
               height={400}
@@ -112,8 +127,8 @@ export default async function ProductDetailPage({ params }: Props) {
           {averageRating ? (
             <p style={{ color: "#555", marginTop: "0.5rem" }}>
               Average rating: <strong>{averageRating}</strong> / 5 (
-              {productReviews.length} review
-              {productReviews.length !== 1 ? "s" : ""})
+              {reviews.length} review
+              {reviews.length !== 1 ? "s" : ""})
             </p>
           ) : (
             <p style={{ color: "#555", marginTop: "0.5rem" }}>
@@ -122,7 +137,7 @@ export default async function ProductDetailPage({ params }: Props) {
           )}
 
           <div style={{ marginTop: "1.5rem" }}>
-            {productReviews.length === 0 ? (
+            {reviews.length === 0 ? (
               <p style={{ color: "#555" }}>Be the first to leave a review.</p>
             ) : (
               <div
@@ -132,7 +147,7 @@ export default async function ProductDetailPage({ params }: Props) {
                   gap: "1rem",
                 }}
               >
-                {productReviews.map((review) => (
+                {reviews.map((review) => (
                   <article
                     key={review.id}
                     style={{
@@ -143,7 +158,7 @@ export default async function ProductDetailPage({ params }: Props) {
                     }}
                   >
                     <p style={{ margin: 0, fontWeight: "bold" }}>
-                      {review.user || "User"} · {review.rating}/5
+                      {review.reviewer} · {review.rating}/5
                     </p>
                     <p
                       style={{
@@ -161,7 +176,7 @@ export default async function ProductDetailPage({ params }: Props) {
                         lineHeight: 1.6,
                       }}
                     >
-                      {review.text}
+                      {review.comment}
                     </p>
                   </article>
                 ))}
@@ -179,7 +194,7 @@ export default async function ProductDetailPage({ params }: Props) {
           }}
         >
           <h3 style={{ marginTop: 0 }}>Leave a Review</h3>
-          <ReviewForm />
+          <ReviewForm productId={id} />
         </section>
       </main>
 

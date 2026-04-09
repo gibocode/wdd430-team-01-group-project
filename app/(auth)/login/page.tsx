@@ -42,10 +42,10 @@ export default function LoginPage() {
     const body = Object.fromEntries(formData);
     const response = await fetch("/api/auth/login", {
       method: "POST",
-      body: JSON.stringify(body),
       headers: {
         "Content-Type": "application/json",
       },
+      body: JSON.stringify(body),
       credentials: "include",
     });
 

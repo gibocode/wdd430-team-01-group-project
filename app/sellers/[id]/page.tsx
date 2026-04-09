@@ -1,9 +1,10 @@
 import Header from "../../components/Header";
 import Footer from "../../components/Footer";
 import ProductCard from "../../components/ProductCard";
-import { mockProducts } from "../../data/products";
-import { mockSellers } from "../../data/sellers";
 import Image from "next/image";
+import { fetchSellerById } from "@/lib/services/sellers";
+import { getAllProductsBySellerId } from "@/models/product";
+import { mapProductToUi, UiProduct } from "@/lib/mappers/product";
 
 type Props = {
   params: Promise<{
@@ -14,7 +15,7 @@ type Props = {
 export default async function SellerProfilePage({ params }: Props) {
   const { id } = await params;
 
-  const seller = mockSellers.find((item) => item.id === id);
+  const { seller, error } = await fetchSellerById(id);
 
   if (!seller) {
     return (
@@ -28,16 +29,19 @@ export default async function SellerProfilePage({ params }: Props) {
           }}
         >
           <h2>Seller Not Found</h2>
-          <p>The requested seller profile could not be found.</p>
+          <p>{error || "The requested seller profile could not be found."}</p>
         </main>
         <Footer />
       </>
     );
   }
 
-  const sellerProducts = mockProducts.filter(
-    (product) => product.sellerId === seller.id,
-  );
+  let sellerProducts: UiProduct[] = [];
+  try {
+    sellerProducts = (await getAllProductsBySellerId(id)).map(mapProductToUi);
+  } catch (err) {
+    console.error("Failed to load seller products:", err);
+  }
 
   return (
     <>
@@ -50,6 +54,20 @@ export default async function SellerProfilePage({ params }: Props) {
           margin: "0 auto",
         }}
       >
+        {error && (
+          <p
+            style={{
+              marginBottom: "1rem",
+              padding: "0.75rem 1rem",
+              backgroundColor: "#fff4e5",
+              color: "#8a5a00",
+              borderRadius: "6px",
+            }}
+          >
+            {error}
+          </p>
+        )}
+
         <section
           style={{
             display: "grid",
@@ -60,7 +78,7 @@ export default async function SellerProfilePage({ params }: Props) {
         >
           <div>
             <Image
-              src={seller.profileUrl ?? "/placeholder.svg"}
+              src={seller.profileUrl}
               alt={seller.shopName}
               width={400}
               height={400}
@@ -120,11 +138,11 @@ export default async function SellerProfilePage({ params }: Props) {
               {sellerProducts.map((product) => (
                 <ProductCard
                   key={product.id}
-                  id={String(product.id)}
+                  id={product.id}
                   name={product.name}
                   description={product.description}
                   price={product.price}
-                  image="/placeholder.svg"
+                  image={product.image}
                 />
               ))}
             </div>

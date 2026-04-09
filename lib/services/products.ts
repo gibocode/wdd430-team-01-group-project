@@ -27,6 +27,7 @@ export async function fetchProducts(): Promise<FetchProductsResult> {
         description: product.description,
         price: product.price,
         image: "/placeholder.svg",
+        sellerId: product.sellerId,
       })),
       error: "Unable to load live product data. Showing fallback products.",
       usingFallback: true,
