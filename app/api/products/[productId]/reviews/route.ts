@@ -1,7 +1,6 @@
 import { getAllReviewsByProductId, createReview } from "@/models/review";
 import { z } from "zod";
 import { Review } from "@/types/review";
-import { ObjectId } from "mongodb";
 import { validateId } from "@/lib/utils";
 
 // Product review data validation

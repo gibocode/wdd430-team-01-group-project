@@ -46,9 +46,6 @@ export default function LoginPage() {
         "Content-Type": "application/json",
       },
       body: JSON.stringify(body),
-      headers: {
-        "Content-Type": "application/json",
-      },
       credentials: "include",
     });
 
