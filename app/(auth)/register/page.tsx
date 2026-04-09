@@ -47,8 +47,12 @@ export default function RegisterPage() {
     } else {
       const data = await response.json();
       try {
-        const errors = JSON.parse(data.error);
-        setErrors(errors.map((error: { message: string }) => error.message));
+        if (data.error) {
+          setErrors([data.error.message]);
+        } else {
+          const errors = JSON.parse(data.error);
+          setErrors(errors.map((error: { message: string }) => error.message));
+        }
       } catch (error) {
         console.error(error);
         setErrors([data.error]);

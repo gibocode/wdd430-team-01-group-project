@@ -1,6 +1,7 @@
 import { z } from "zod";
 import { findUserByEmail } from "@/models/user";
 import bcrypt from "bcrypt";
+import { signToken } from "@/lib/jwt";
 import { cookies } from "next/headers";
 
 const LoginSchema = z.object({
@@ -19,30 +20,37 @@ export async function POST(request: Request): Promise<Response> {
     const user = await findUserByEmail(email);
 
     if (!user) {
-      return Response.json(
-        { error: "Login failed. Invalid email or password." },
-        { status: 400 },
-      );
+      throw new Error("Login failed. Invalid email or password.");
     }
 
     const isPasswordValid = await bcrypt.compare(password, user.password);
 
     if (!isPasswordValid) {
-      return Response.json(
-        { error: "Login failed. Invalid email or password." },
-        { status: 400 },
-      );
+      throw new Error("Login failed. Invalid email or password.");
     }
 
-    const cookieStore = await cookies();
-    cookieStore.set("session", user._id.toString(), {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
-      maxAge: 60 * 60 * 24 * 7, // 7 days
-      path: "/",
+    // Use jwt to sign a token with the user's id and email
+    const token = signToken({
+      userId: user._id.toString(),
+      email: user.email,
     });
 
-    return Response.json({ success: true, message: "Login successful." });
+    const cookieStore = await cookies();
+    cookieStore.set("auth_token", token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "lax",
+      path: "/",
+      maxAge: 60 * 60 * 24 * 7,
+    });
+
+    return Response.json({
+      success: true,
+      user: {
+        id: user._id.toString(),
+        email: user.email,
+      },
+    });
   } catch (error) {
     return Response.json({ error: (error as Error).message }, { status: 400 });
   }

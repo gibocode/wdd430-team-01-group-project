@@ -3,6 +3,6 @@ import { NextResponse } from "next/server";
 
 export async function GET(request: Request) {
   const cookieStore = await cookies();
-  cookieStore.delete("session");
+  cookieStore.delete("auth_token");
   return NextResponse.redirect(new URL("/login?logout=true", request.url));
 }
