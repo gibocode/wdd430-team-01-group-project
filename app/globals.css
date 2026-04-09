@@ -3,6 +3,9 @@
 :root {
   --background: #ffffff;
   --foreground: #171717;
+  --sidebar-background: #fff;
+  --sidebar-item-active: #1976d279;
+  --sidebar-item-hover: #1976d21e;
 }
 
 @theme inline {
@@ -22,5 +25,5 @@
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: Roboto, sans-serif;
 }

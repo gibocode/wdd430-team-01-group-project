@@ -43,6 +43,10 @@ export default function LoginPage() {
     const response = await fetch("/api/auth/login", {
       method: "POST",
       body: JSON.stringify(body),
+      headers: {
+        "Content-Type": "application/json",
+      },
+      credentials: "include",
     });
 
     setIsLoading(false);
@@ -52,8 +56,12 @@ export default function LoginPage() {
     } else {
       const data = await response.json();
       try {
-        const errors = JSON.parse(data.error);
-        setErrors(errors.map((error: { message: string }) => error.message));
+        if (data.error) {
+          setErrors([data.error.message]);
+        } else {
+          const errors = JSON.parse(data.error);
+          setErrors(errors.map((error: { message: string }) => error.message));
+        }
       } catch (error) {
         console.error(error);
         setErrors([data.error]);
