@@ -9,12 +9,13 @@ import {
   Card,
   Typography,
   Box,
-  Button,
 } from "@mui/material";
-import { IconEdit, IconPlus, IconTrash } from "@tabler/icons-react";
 import Image from "next/image";
 import { formatCurrency } from "@/lib/utils";
 import { getCurrentUser } from "@/lib/auth";
+import AddProductButtonWithModal from "@/app/components/dashboard/manage/products/AddProductButtonWithModal";
+import EditProductButtonWithModal from "@/app/components/dashboard/manage/products/EditProductButtonWithModal";
+import DeleteProductButtonWithModal from "@/app/components/dashboard/manage/products/DeleteProductButtonWithModal";
 
 export default async function ManageProductsPage() {
   const user = await getCurrentUser();
@@ -37,13 +38,7 @@ export default async function ManageProductsPage() {
             <Typography variant="h4" sx={{ fontSize: 24 }}>
               Manage Products
             </Typography>
-            <Button
-              variant="contained"
-              color="primary"
-              startIcon={<IconPlus />}
-            >
-              Add Product
-            </Button>
+            <AddProductButtonWithModal />
           </Box>
         </CardContent>
       </Card>
@@ -81,21 +76,8 @@ export default async function ManageProductsPage() {
                   <TableCell>{product.description || "-"}</TableCell>
                   <TableCell>{formatCurrency(product.price, "USD")}</TableCell>
                   <TableCell>
-                    <Button
-                      variant="contained"
-                      color="primary"
-                      startIcon={<IconEdit />}
-                      sx={{ marginRight: 1 }}
-                    >
-                      Edit
-                    </Button>
-                    <Button
-                      variant="contained"
-                      color="error"
-                      startIcon={<IconTrash />}
-                    >
-                      Delete
-                    </Button>
+                    <EditProductButtonWithModal product={product} />
+                    <DeleteProductButtonWithModal product={product} />
                   </TableCell>
                 </TableRow>
               ))}
