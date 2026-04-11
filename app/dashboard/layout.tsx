@@ -3,7 +3,7 @@
 import Sidebar from "@/app/components/dashboard/layout/Sidebar";
 import { IconDashboard, IconShoppingCart, IconUser } from "@tabler/icons-react";
 import { SidebarItem } from "@/types/dashboard/sidebar-item";
-import Header from "../components/dashboard/layout/Header";
+import DashboardHeader from "../components/dashboard/layout/DashboardHeader";
 import { Box } from "@mui/material";
 import theme from "@/utils/theme";
 import AuthProvider from "@/lib/context/AuthProvider";
@@ -33,8 +33,8 @@ export default function AdminDashboardLayout({
 }) {
   return (
     <>
-      <AuthProvider>
-        <Header />
+      <>
+        <DashboardHeader />
         <Sidebar items={items} />
         <Box
           sx={{
@@ -48,7 +48,7 @@ export default function AdminDashboardLayout({
         >
           {children}
         </Box>
-      </AuthProvider>
+      </>
     </>
   );
 }
