@@ -1,26 +1,40 @@
 "use client";
 
-import { AppBar, Box, Toolbar } from "@mui/material";
-import theme from "@/utils/theme";
+import { AppBar, Box, Toolbar, IconButton } from "@mui/material";
+import MenuIcon from "@mui/icons-material/Menu";
 import UserDropdown from "./header/UserDropdown";
 import { useAuth } from "@/lib/context/AuthProvider";
 
-export default function Header() {
+export default function DashboardHeader({
+  onMenuClick,
+}: {
+  onMenuClick: () => void;
+}) {
   const { user, loading } = useAuth();
+
   return (
     <AppBar
+      elevation={0}
       sx={{
-        backgroundColor: "white",
-        color: "black",
-        position: "fixed" as const,
+        backgroundColor: "background.paper",
+        color: "text.primary",
+        position: "fixed",
         top: 0,
         left: 0,
         right: 0,
         boxShadow: "none",
-        borderBottom: `1px solid ${theme.palette.divider}`,
+        borderBottom: "1px solid",
+        borderColor: "divider",
+        zIndex: 2100,
       }}
     >
-      <Toolbar disableGutters sx={{ paddingX: 1 }}>
+      <Toolbar
+        disableGutters
+        sx={{
+          px: 1.5,
+          minHeight: 64,
+        }}
+      >
         <Box
           sx={{
             display: "flex",
@@ -29,6 +43,16 @@ export default function Header() {
             width: "100%",
           }}
         >
+          <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+            <IconButton
+              onClick={onMenuClick}
+              sx={{ display: { xs: "inline-flex", md: "none" } }}
+              aria-label="open dashboard navigation"
+            >
+              <MenuIcon />
+            </IconButton>
+          </Box>
+
           {!loading && user && <UserDropdown user={user} />}
         </Box>
       </Toolbar>

@@ -11,10 +11,10 @@ import {
   FormGroup,
   Modal,
   TextField,
+  Box,
 } from "@mui/material";
-import { IconPlus } from "@tabler/icons-react";
+import { IconPlus, IconUpload } from "@tabler/icons-react";
 import { useState } from "react";
-import { IconUpload } from "@tabler/icons-react";
 import { styled } from "@mui/material/styles";
 
 const VisuallyHiddenInput = styled("input")({
@@ -31,9 +31,11 @@ const VisuallyHiddenInput = styled("input")({
 
 export default function AddProductButtonWithModal() {
   const [openAddProductModal, setOpenAddProductModal] = useState(false);
+
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
   };
+
   return (
     <>
       <Button
@@ -41,9 +43,11 @@ export default function AddProductButtonWithModal() {
         color="primary"
         startIcon={<IconPlus />}
         onClick={() => setOpenAddProductModal(true)}
+        sx={{ textTransform: "none", fontWeight: 600 }}
       >
         Add Product
       </Button>
+
       <Modal
         open={openAddProductModal}
         onClose={() => setOpenAddProductModal(false)}
@@ -52,6 +56,7 @@ export default function AddProductButtonWithModal() {
           justifyContent: "center",
           alignItems: "center",
           zIndex: 2000,
+          px: 2,
         }}
         aria-labelledby="add-product-modal"
         aria-describedby="add-product-modal-description"
@@ -63,24 +68,56 @@ export default function AddProductButtonWithModal() {
           },
         }}
       >
-        <form onSubmit={handleSubmit}>
-          <Card sx={{ width: "500px", minHeight: "500px" }}>
-            <CardHeader title="Add Product" />
+        <Box
+          component="form"
+          onSubmit={handleSubmit}
+          sx={{ width: "100%", maxWidth: 520 }}
+        >
+          <Card
+            sx={{
+              width: "100%",
+              backgroundColor: "background.paper",
+              borderRadius: 2,
+              boxShadow: 3,
+            }}
+          >
+            <CardHeader
+              title="Add Product"
+              slotProps={{
+                title: {
+                  sx: {
+                    fontSize: "1.5rem",
+                    fontWeight: 700,
+                  },
+                },
+              }}
+            />
+
             <Divider />
-            <CardContent
-              sx={{ display: "flex", flexDirection: "column", gap: 2 }}
-            >
+
+            <CardContent sx={{ display: "flex", flexDirection: "column", gap: 2.5 }}>
               <FormGroup>
-                <FormControl fullWidth sx={{ marginBottom: 2 }}>
-                  <TextField id="product-name" label="Product Name" required />
+                <FormControl fullWidth sx={{ mb: 2 }}>
+                  <TextField
+                    id="product-name"
+                    label="Product Name"
+                    required
+                  />
                 </FormControl>
-                <FormControl fullWidth sx={{ marginBottom: 2 }}>
+
+                <FormControl fullWidth sx={{ mb: 2 }}>
                   <Button
                     component="label"
                     role={undefined}
-                    variant="contained"
+                    variant="outlined"
+                    color="primary"
                     tabIndex={-1}
                     startIcon={<IconUpload />}
+                    sx={{
+                      justifyContent: "flex-start",
+                      textTransform: "none",
+                      fontWeight: 500,
+                    }}
                   >
                     Upload Image
                     <VisuallyHiddenInput
@@ -89,7 +126,8 @@ export default function AddProductButtonWithModal() {
                     />
                   </Button>
                 </FormControl>
-                <FormControl fullWidth sx={{ marginBottom: 2 }}>
+
+                <FormControl fullWidth sx={{ mb: 2 }}>
                   <TextField
                     id="product-description"
                     label="Product Description"
@@ -98,38 +136,50 @@ export default function AddProductButtonWithModal() {
                     rows={4}
                   />
                 </FormControl>
-                <FormControl fullWidth sx={{ marginBottom: 2 }}>
+
+                <FormControl fullWidth>
                   <TextField
                     id="product-price"
+                    name="price"
                     label="Product Price"
                     required
                     type="number"
+                    inputProps={{ step: "0.01", min: 0 }}
                   />
                 </FormControl>
               </FormGroup>
             </CardContent>
+
             <Divider />
+
             <CardActions
               sx={{
                 display: "flex",
-                justifyContent: "center",
-                gap: 2,
-                padding: 2,
+                justifyContent: "flex-end",
+                gap: 1.5,
+                p: 2,
               }}
             >
               <Button
                 variant="outlined"
                 color="secondary"
                 onClick={() => setOpenAddProductModal(false)}
+                sx={{ textTransform: "none", fontWeight: 600 }}
               >
                 Cancel
               </Button>
-              <Button variant="contained" color="primary" type="submit">
+
+              <Button
+                variant="contained"
+                color="primary"
+                type="submit"
+                sx={{ textTransform: "none", fontWeight: 600 }}
+              >
                 Add Product
               </Button>
             </CardActions>
           </Card>
-        </form>
+        </Box>
       </Modal>
     </>
   );

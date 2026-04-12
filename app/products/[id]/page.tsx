@@ -5,6 +5,15 @@ import Footer from "../../components/Footer";
 import ReviewForm from "../../components/ReviewForm";
 import { fetchProductById } from "@/lib/services/product-detail";
 import { fetchReviewsByProductId } from "@/lib/services/reviews";
+import {
+  Alert,
+  Box,
+  Card,
+  CardContent,
+  Container,
+  Divider,
+  Typography,
+} from "@mui/material";
 
 type Props = {
   params: Promise<{
@@ -22,12 +31,14 @@ export default async function ProductDetailPage({ params }: Props) {
     return (
       <>
         <Header />
-        <main
-          style={{ padding: "1.5rem", maxWidth: "1000px", margin: "0 auto" }}
-        >
-          <h2>Product Not Found</h2>
-          <p>{productError || "The requested product could not be found."}</p>
-        </main>
+        <Container maxWidth="lg" sx={{ py: 4 }}>
+          <Typography variant="h4" sx={{ fontWeight: 700, mb: 1 }}>
+            Product Not Found
+          </Typography>
+          <Typography color="text.secondary">
+            {productError || "The requested product could not be found."}
+          </Typography>
+        </Container>
         <Footer />
       </>
     );
@@ -45,158 +56,164 @@ export default async function ProductDetailPage({ params }: Props) {
     <>
       <Header />
 
-      <main style={{ padding: "1.5rem", maxWidth: "1000px", margin: "0 auto" }}>
+      <Container maxWidth="lg" sx={{ py: 4 }}>
         {productError && (
-          <p
-            style={{
-              marginBottom: "1rem",
-              padding: "0.75rem 1rem",
-              backgroundColor: "#fff4e5",
-              color: "#8a5a00",
-              borderRadius: "6px",
-            }}
-          >
+          <Alert severity="warning" sx={{ mb: 2 }}>
             {productError}
-          </p>
+          </Alert>
         )}
 
         {reviewsError && (
-          <p
-            style={{
-              marginBottom: "1rem",
-              padding: "0.75rem 1rem",
-              backgroundColor: "#fff4e5",
-              color: "#8a5a00",
-              borderRadius: "6px",
-            }}
-          >
+          <Alert severity="warning" sx={{ mb: 2 }}>
             {reviewsError}
-          </p>
+          </Alert>
         )}
 
-        <section
-          style={{
+        <Box
+          component="section"
+          sx={{
             display: "grid",
-            gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))",
-            gap: "2rem",
+            gridTemplateColumns: { xs: "1fr", md: "1fr 1fr" },
+            gap: 4,
             alignItems: "start",
           }}
         >
-          <div>
-            <Image
-              src={product.image}
-              alt={product.name}
-              width={400}
-              height={400}
-              style={{ width: "100%", height: "auto", borderRadius: "8px" }}
-            />
-          </div>
+          <Box>
+            <Box
+              sx={{
+                position: "relative",
+                width: "100%",
+                aspectRatio: "1 / 1",
+                borderRadius: 2,
+                overflow: "hidden",
+                backgroundColor: "background.paper",
+              }}
+            >
+              <Image
+                src={product.image}
+                alt={product.name}
+                fill
+                style={{ objectFit: "cover" }}
+              />
+            </Box>
+          </Box>
 
-          <div>
-            <h2>{product.name}</h2>
+          <Box>
+            <Typography variant="h4" sx={{ fontWeight: 700 }}>
+              {product.name}
+            </Typography>
 
-            <p style={{ color: "#555", marginTop: "1rem", lineHeight: 1.6 }}>
+            <Typography
+              sx={{
+                color: "text.secondary",
+                mt: 2,
+                lineHeight: 1.7,
+              }}
+            >
               {product.description}
-            </p>
+            </Typography>
 
-            <p
-              style={{
-                fontWeight: "bold",
-                fontSize: "1.25rem",
-                marginTop: "1rem",
+            <Typography
+              variant="h5"
+              sx={{
+                fontWeight: 700,
+                color: "primary.main",
+                mt: 2,
               }}
             >
               {product.price}
-            </p>
+            </Typography>
 
-            <p style={{ marginTop: "1rem" }}>
+            <Typography sx={{ mt: 2 }}>
               Seller:{" "}
               <Link
                 href={`/sellers/${product.sellerId}`}
-                style={{ color: "#1976D2" }}
+                style={{
+                  color: "inherit",
+                  textDecorationColor: "currentColor",
+                }}
               >
                 View seller profile
               </Link>
-            </p>
-          </div>
-        </section>
+            </Typography>
+          </Box>
+        </Box>
 
-        <section style={{ marginTop: "3rem" }}>
-          <h3>Reviews</h3>
+        <Box component="section" sx={{ mt: 6 }}>
+          <Typography variant="h5" sx={{ fontWeight: 700 }}>
+            Reviews
+          </Typography>
 
           {averageRating ? (
-            <p style={{ color: "#555", marginTop: "0.5rem" }}>
+            <Typography sx={{ color: "text.secondary", mt: 1 }}>
               Average rating: <strong>{averageRating}</strong> / 5 (
-              {reviews.length} review
-              {reviews.length !== 1 ? "s" : ""})
-            </p>
+              {reviews.length} review{reviews.length !== 1 ? "s" : ""})
+            </Typography>
           ) : (
-            <p style={{ color: "#555", marginTop: "0.5rem" }}>
+            <Typography sx={{ color: "text.secondary", mt: 1 }}>
               No reviews yet.
-            </p>
+            </Typography>
           )}
 
-          <div style={{ marginTop: "1.5rem" }}>
+          <Box sx={{ mt: 3 }}>
             {reviews.length === 0 ? (
-              <p style={{ color: "#555" }}>Be the first to leave a review.</p>
+              <Typography sx={{ color: "text.secondary" }}>
+                Be the first to leave a review.
+              </Typography>
             ) : (
-              <div
-                style={{
-                  display: "flex",
-                  flexDirection: "column",
-                  gap: "1rem",
-                }}
-              >
+              <Box sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
                 {reviews.map((review) => (
-                  <article
+                  <Card
                     key={review.id}
-                    style={{
-                      border: "1px solid #ddd",
-                      borderRadius: "8px",
-                      padding: "1rem",
-                      backgroundColor: "#fff",
+                    sx={{
+                      backgroundColor: "background.paper",
+                      borderRadius: 2,
                     }}
                   >
-                    <p style={{ margin: 0, fontWeight: "bold" }}>
-                      {review.reviewer} · {review.rating}/5
-                    </p>
-                    <p
-                      style={{
-                        color: "#777",
-                        fontSize: "0.9rem",
-                        marginTop: "0.25rem",
-                      }}
-                    >
-                      {review.date}
-                    </p>
-                    <p
-                      style={{
-                        marginTop: "0.75rem",
-                        color: "#555",
-                        lineHeight: 1.6,
-                      }}
-                    >
-                      {review.comment}
-                    </p>
-                  </article>
+                    <CardContent>
+                      <Typography sx={{ fontWeight: 700 }}>
+                        {review.reviewer} · {review.rating}/5
+                      </Typography>
+                      <Typography
+                        variant="body2"
+                        sx={{ color: "text.secondary", mt: 0.5 }}
+                      >
+                        {review.date}
+                      </Typography>
+                      <Typography
+                        sx={{
+                          mt: 1.5,
+                          color: "text.secondary",
+                          lineHeight: 1.7,
+                        }}
+                      >
+                        {review.comment}
+                      </Typography>
+                    </CardContent>
+                  </Card>
                 ))}
-              </div>
+              </Box>
             )}
-          </div>
-        </section>
+          </Box>
+        </Box>
 
-        <section
-          style={{
-            marginTop: "3rem",
-            padding: "1rem",
-            backgroundColor: "#f5f5f5",
-            borderRadius: "8px",
+        <Card
+          component="section"
+          sx={{
+            mt: 6,
+            backgroundColor: "background.paper",
+            borderRadius: 2,
           }}
         >
-          <h3 style={{ marginTop: 0 }}>Leave a Review</h3>
-          <ReviewForm productId={id} />
-        </section>
-      </main>
+          <CardContent>
+            <Typography variant="h5" sx={{ fontWeight: 700, mb: 2 }}>
+              Leave a Review
+            </Typography>
+            <Divider sx={{ mb: 2 }} />
+            <ReviewForm productId={id} />
+          </CardContent>
+        </Card>
+      </Container>
 
       <Footer />
     </>

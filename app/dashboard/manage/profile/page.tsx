@@ -15,80 +15,143 @@ import { getCurrentUser } from "@/lib/auth";
 
 export default async function ManageProfilePage() {
   const user = await getCurrentUser();
+
+  if (!user) {
+    return (
+      <Card sx={{ backgroundColor: "background.paper" }}>
+        <CardContent>
+          <Typography variant="h5" sx={{ fontWeight: 700 }}>
+            Seller Profile
+          </Typography>
+          <Typography sx={{ mt: 1, color: "text.secondary" }}>
+            You must be logged in to manage your profile.
+          </Typography>
+        </CardContent>
+      </Card>
+    );
+  }
+
   const response = await fetch(
-    `${process.env.NEXT_PUBLIC_API_URL}/api/sellers/${user?.userId}`,
+    `${process.env.NEXT_PUBLIC_API_URL}/api/sellers/${user.userId}`,
+    { cache: "no-store" },
   );
   const responseJson = await response.json();
   const seller = responseJson.data;
 
+  if (!seller) {
+    return (
+      <Card sx={{ backgroundColor: "background.paper" }}>
+        <CardContent>
+          <Typography variant="h5" sx={{ fontWeight: 700 }}>
+            Seller Profile
+          </Typography>
+          <Typography sx={{ mt: 1, color: "text.secondary" }}>
+            Seller profile not found.
+          </Typography>
+        </CardContent>
+      </Card>
+    );
+  }
+
   return (
     <>
-      <Card sx={{ marginBottom: 2 }}>
-        <CardContent sx={{ padding: "16px !important" }}>
+      <Card
+        sx={{
+          mb: 2,
+          backgroundColor: "background.paper",
+          borderRadius: 2,
+        }}
+      >
+        <CardContent sx={{ p: "16px !important" }}>
           <Box
             display="flex"
             flexDirection="row"
             alignItems="center"
             justifyContent="space-between"
           >
-            <Typography variant="h4" sx={{ fontSize: 24 }}>
+            <Typography variant="h4" sx={{ fontSize: 24, fontWeight: 700 }}>
               Seller Profile
             </Typography>
           </Box>
         </CardContent>
       </Card>
-      <Card>
-        <CardContent sx={{ padding: "0 !important" }}>
-          <Grid container spacing={2} sx={{ width: "100%" }}>
+
+      <Card
+        sx={{
+          backgroundColor: "background.paper",
+          borderRadius: 2,
+        }}
+      >
+        <CardContent sx={{ p: "0 !important" }}>
+          <Grid container spacing={0} sx={{ width: "100%" }}>
             <Grid
-              size={3}
-              padding={4}
-              paddingTop={6}
-              display="flex"
-              flexDirection="column"
-              alignItems="center"
-              justifyContent="start"
-              borderRight="1px solid #e0e0e0"
+              size={{ xs: 12, md: 3 }}
+              sx={{
+                p: 4,
+                pt: 6,
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+                justifyContent: "flex-start",
+                borderRight: { xs: "none", md: "1px solid" },
+                borderBottom: { xs: "1px solid", md: "none" },
+                borderColor: "divider",
+              }}
             >
               <Avatar
-                src={seller.profileImage}
+                src={seller.profileUrl}
                 alt={seller.sellerName}
                 sx={{ width: 150, height: 150 }}
               />
               <Typography
                 variant="h6"
-                sx={{ fontSize: 26, fontWeight: 500, marginTop: 2 }}
+                sx={{ fontSize: 26, fontWeight: 600, mt: 2, textAlign: "center" }}
               >
                 {seller.sellerName}
               </Typography>
+              <Typography sx={{ mt: 1, color: "text.secondary", textAlign: "center" }}>
+                {seller.shopName}
+              </Typography>
             </Grid>
-            <Grid size={9} padding={4}>
-              <FormControl fullWidth sx={{ marginBottom: 2 }}>
-                <FormLabel>Seller Name</FormLabel>
+
+            <Grid size={{ xs: 12, md: 9 }} sx={{ p: 4 }}>
+              <FormControl fullWidth sx={{ mb: 2 }}>
+                <FormLabel sx={{ color: "text.secondary", mb: 0.5 }}>
+                  Seller Name
+                </FormLabel>
                 <TextField
                   id="seller-name"
                   variant="outlined"
                   value={seller.sellerName}
                 />
               </FormControl>
-              <FormControl fullWidth sx={{ marginBottom: 2 }}>
-                <FormLabel>Shop Name</FormLabel>
+
+              <FormControl fullWidth sx={{ mb: 2 }}>
+                <FormLabel sx={{ color: "text.secondary", mb: 0.5 }}>
+                  Shop Name
+                </FormLabel>
                 <TextField
                   id="shop-name"
                   variant="outlined"
                   value={seller.shopName}
                 />
               </FormControl>
-              <FormControl fullWidth sx={{ marginBottom: 2 }}>
-                <FormLabel>Tag Line</FormLabel>
+
+              <FormControl fullWidth sx={{ mb: 2 }}>
+                <FormLabel sx={{ color: "text.secondary", mb: 0.5 }}>
+                  Tag Line
+                </FormLabel>
                 <TextField
                   id="tagline"
                   variant="outlined"
                   value={seller.tagline}
                 />
               </FormControl>
-              <FormControl fullWidth sx={{ marginBottom: 2 }}>
-                <FormLabel>Story</FormLabel>
+
+              <FormControl fullWidth sx={{ mb: 2 }}>
+                <FormLabel sx={{ color: "text.secondary", mb: 0.5 }}>
+                  Story
+                </FormLabel>
                 <TextField
                   id="story"
                   variant="outlined"
@@ -97,10 +160,11 @@ export default async function ManageProfilePage() {
                   rows={4}
                 />
               </FormControl>
+
               <Button
                 variant="contained"
                 color="primary"
-                sx={{ marginTop: 2 }}
+                sx={{ mt: 2, textTransform: "none", fontWeight: 600 }}
                 startIcon={<IconDeviceFloppy />}
                 size="large"
               >
