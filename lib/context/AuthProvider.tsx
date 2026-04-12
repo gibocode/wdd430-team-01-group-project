@@ -28,12 +28,18 @@ export default function AuthProvider({
       const response = await fetch("/api/auth/user", {
         credentials: "include",
       });
-      if (response.ok) {
-        const userData = await response.json();
-        setUser(userData.user);
-      } else {
+
+      if (response.status === 401) {
+        setUser(null);
+        return;
+      }
+
+      if (!response.ok) {
         throw new Error("Failed to fetch user");
       }
+
+      const data = await response.json();
+      setUser(data.user);
     } catch (error) {
       console.error(error);
       setUser(null);
