@@ -6,7 +6,6 @@ import { SidebarItem } from "@/types/dashboard/sidebar-item";
 import DashboardHeader from "../components/dashboard/layout/DashboardHeader";
 import { Box } from "@mui/material";
 import theme from "@/utils/theme";
-import AuthProvider from "@/lib/context/AuthProvider";
 
 const items: SidebarItem[] = [
   {

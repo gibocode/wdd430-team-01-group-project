@@ -7,7 +7,6 @@ import {
   Toolbar,
   IconButton,
   Menu,
-  MenuItem,
   Typography,
   Box,
 } from "@mui/material";
@@ -46,7 +45,11 @@ export default function Header() {
             <MenuIcon />
           </IconButton>
 
-          <Menu anchorEl={anchorEl} open={Boolean(anchorEl)} onClose={handleClose}>
+          <Menu
+            anchorEl={anchorEl}
+            open={Boolean(anchorEl)}
+            onClose={handleClose}
+          >
             <Box
               sx={{
                 display: "flex",

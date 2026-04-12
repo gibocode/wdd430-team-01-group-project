@@ -8,10 +8,7 @@ type Props = {
   onNavigate?: () => void;
 };
 
-export default function AuthNavLinks({
-  mobile = false,
-  onNavigate,
-}: Props) {
+export default function AuthNavLinks({ mobile = false, onNavigate }: Props) {
   const { user } = useAuth();
 
   const linkStyle = {
