@@ -2,6 +2,7 @@
 
 import { FormEvent, useState } from "react";
 import { useRouter } from "next/navigation";
+import { useAuth } from "@/lib/context/AuthProvider";
 
 type ReviewFormProps = {
   productId: string;
@@ -13,8 +14,9 @@ export default function ReviewForm({ productId }: ReviewFormProps) {
   const [error, setError] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const router = useRouter();
+  const { user, loading } = useAuth();
 
-  const isLoggedIn = false; // replace later with real auth state
+  const isLoggedIn = !!user;
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -29,9 +31,9 @@ export default function ReviewForm({ productId }: ReviewFormProps) {
         },
         body: JSON.stringify({
           rating: Number(rating),
-          reviewer: "User",
           comment: text,
         }),
+        credentials: "include",
       });
 
       const data = await response.json();
@@ -49,6 +51,12 @@ export default function ReviewForm({ productId }: ReviewFormProps) {
       setIsSubmitting(false);
     }
   };
+
+  if (loading) {
+    return (
+      <p style={{ color: "#555", marginTop: "1rem" }}>Checking login...</p>
+    );
+  }
 
   if (!isLoggedIn) {
     return (
