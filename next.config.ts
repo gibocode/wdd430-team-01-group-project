@@ -17,8 +17,7 @@ const nextConfig: NextConfig = {
         pathname: "/**",
       },
     ],
-  },
-  outputFileTracingRoot: path.join(__dirname, "../../"),
+  }
 };
 
 export default nextConfig;
