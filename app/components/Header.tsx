@@ -1,7 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import Link from "next/link";
 import {
   AppBar,
   Toolbar,
@@ -12,6 +11,8 @@ import {
 } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
 import AuthNavLinks from "./navigation/AuthNavLinks";
+import NextLink from "./NextLink";
+import theme from "@/utils/theme";
 
 export default function Header() {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
@@ -25,23 +26,40 @@ export default function Header() {
   };
 
   return (
-    <AppBar position="static" color="inherit" elevation={0}>
-      <Toolbar sx={{ justifyContent: "space-between" }}>
+    <AppBar
+      position="static"
+      elevation={0}
+      sx={{
+        backgroundColor: theme.palette.primary.main,
+        color: "#FFFFFF",
+        borderBottom: "1px solid rgba(255, 255, 255, 0.12)",
+      }}
+    >
+      <Toolbar sx={{ justifyContent: "space-between", minHeight: 64 }}>
         <Typography
-          component={Link}
+          component={NextLink}
           href="/"
           variant="h6"
-          sx={{ textDecoration: "none", color: "inherit", fontWeight: 700 }}
+          sx={{
+            textDecoration: "none",
+            color: "inherit",
+            fontWeight: 700,
+            letterSpacing: 0.2,
+          }}
         >
           Handcrafted Haven
         </Typography>
 
-        <Box sx={{ display: { xs: "none", md: "flex" }, gap: 2 }}>
+        <Box sx={{ display: { xs: "none", md: "flex" }, gap: 3 }}>
           <AuthNavLinks />
         </Box>
 
         <Box sx={{ display: { xs: "block", md: "none" } }}>
-          <IconButton onClick={handleOpen} aria-label="open navigation menu">
+          <IconButton
+            onClick={handleOpen}
+            aria-label="open navigation menu"
+            sx={{ color: "#FFFFFF" }}
+          >
             <MenuIcon />
           </IconButton>
 
@@ -49,6 +67,16 @@ export default function Header() {
             anchorEl={anchorEl}
             open={Boolean(anchorEl)}
             onClose={handleClose}
+            slotProps={{
+              paper: {
+                sx: {
+                  mt: 1,
+                  minWidth: 180,
+                  backgroundColor: theme.palette.background.paper,
+                  color: theme.palette.text.primary,
+                },
+              },
+            }}
           >
             <Box
               sx={{
@@ -57,7 +85,6 @@ export default function Header() {
                 px: 2,
                 py: 1.5,
                 gap: 1.5,
-                minWidth: 160,
               }}
             >
               <AuthNavLinks mobile onNavigate={handleClose} />

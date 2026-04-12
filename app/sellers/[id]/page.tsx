@@ -5,6 +5,12 @@ import Image from "next/image";
 import { fetchSellerById } from "@/lib/services/sellers";
 import { getAllProductsBySellerId } from "@/models/product";
 import { mapProductToUi, UiProduct } from "@/lib/mappers/product";
+import {
+  Alert,
+  Box,
+  Container,
+  Typography,
+} from "@mui/material";
 
 type Props = {
   params: Promise<{
@@ -21,16 +27,14 @@ export default async function SellerProfilePage({ params }: Props) {
     return (
       <>
         <Header />
-        <main
-          style={{
-            padding: "1.5rem",
-            maxWidth: "1000px",
-            margin: "0 auto",
-          }}
-        >
-          <h2>Seller Not Found</h2>
-          <p>{error || "The requested seller profile could not be found."}</p>
-        </main>
+        <Container maxWidth="lg" sx={{ py: 4 }}>
+          <Typography variant="h4" sx={{ fontWeight: 700, mb: 1 }}>
+            Seller Not Found
+          </Typography>
+          <Typography color="text.secondary">
+            {error || "The requested seller profile could not be found."}
+          </Typography>
+        </Container>
         <Footer />
       </>
     );
@@ -47,92 +51,102 @@ export default async function SellerProfilePage({ params }: Props) {
     <>
       <Header />
 
-      <main
-        style={{
-          padding: "1.5rem",
-          maxWidth: "1000px",
-          margin: "0 auto",
-        }}
-      >
+      <Container maxWidth="lg" sx={{ py: 4 }}>
         {error && (
-          <p
-            style={{
-              marginBottom: "1rem",
-              padding: "0.75rem 1rem",
-              backgroundColor: "#fff4e5",
-              color: "#8a5a00",
-              borderRadius: "6px",
-            }}
-          >
+          <Alert severity="warning" sx={{ mb: 2 }}>
             {error}
-          </p>
+          </Alert>
         )}
 
-        <section
-          style={{
+        <Box
+          component="section"
+          sx={{
             display: "grid",
-            gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))",
-            gap: "2rem",
+            gridTemplateColumns: { xs: "1fr", md: "1fr 1fr" },
+            gap: 4,
             alignItems: "start",
           }}
         >
-          <div>
-            <Image
-              src={seller.profileUrl}
-              alt={seller.shopName}
-              width={400}
-              height={400}
-              style={{ width: "100%", height: "auto", borderRadius: "8px" }}
-            />
-          </div>
+          <Box>
+            <Box
+              sx={{
+                position: "relative",
+                width: "100%",
+                aspectRatio: "1 / 1",
+                borderRadius: 2,
+                overflow: "hidden",
+                backgroundColor: "background.paper",
+              }}
+            >
+              <Image
+                src={seller.profileUrl}
+                alt={seller.shopName}
+                fill
+                style={{ objectFit: "cover" }}
+              />
+            </Box>
+          </Box>
 
-          <div>
-            <p
-              style={{
-                color: "#1976D2",
-                fontWeight: "bold",
-                marginBottom: "0.5rem",
+          <Box>
+            <Typography
+              sx={{
+                color: "primary.main",
+                fontWeight: 700,
+                mb: 1,
               }}
             >
               Seller Profile
-            </p>
+            </Typography>
 
-            <h2 style={{ marginTop: 0 }}>{seller.shopName}</h2>
+            <Typography variant="h4" sx={{ fontWeight: 700 }}>
+              {seller.shopName}
+            </Typography>
 
-            <p
-              style={{
+            <Typography
+              sx={{
                 fontSize: "1.05rem",
-                color: "#555",
-                marginTop: "0.5rem",
+                color: "text.secondary",
+                mt: 1,
               }}
             >
               {seller.tagline}
-            </p>
+            </Typography>
 
-            <p style={{ marginTop: "1rem" }}>
-              <strong>Seller:</strong> {seller.sellerName}
-            </p>
+            <Typography sx={{ mt: 2 }}>
+              <Box component="span" sx={{ fontWeight: 700 }}>
+                Seller:
+              </Box>{" "}
+              {seller.sellerName}
+            </Typography>
 
-            <p style={{ color: "#555", lineHeight: 1.6, marginTop: "1rem" }}>
+            <Typography
+              sx={{
+                color: "text.secondary",
+                lineHeight: 1.7,
+                mt: 2,
+              }}
+            >
               {seller.story}
-            </p>
-          </div>
-        </section>
+            </Typography>
+          </Box>
+        </Box>
 
-        <section style={{ marginTop: "2rem" }}>
-          <h3>Products by this seller</h3>
+        <Box component="section" sx={{ mt: 4 }}>
+          <Typography variant="h5" sx={{ fontWeight: 700 }}>
+            Products by this seller
+          </Typography>
 
           {sellerProducts.length === 0 ? (
-            <p style={{ color: "#555", marginTop: "1rem" }}>
+            <Typography sx={{ color: "text.secondary", mt: 2 }}>
               No products available for this seller yet.
-            </p>
+            </Typography>
           ) : (
-            <div
-              style={{
+            <Box
+              sx={{
                 display: "grid",
                 gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))",
-                gap: "1.5rem",
-                marginTop: "1rem",
+                gap: 3,
+                mt: 2,
               }}
             >
               {sellerProducts.map((product) => (
@@ -145,10 +159,10 @@ export default async function SellerProfilePage({ params }: Props) {
                   image={product.image}
                 />
               ))}
-            </div>
+            </Box>
           )}
-        </section>
-      </main>
+        </Box>
+      </Container>
 
       <Footer />
     </>

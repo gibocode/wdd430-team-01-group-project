@@ -1,112 +1,133 @@
-import { Box, Button, Typography } from "@mui/material";
-import theme from "@/utils/theme";
-import { useState } from "react";
+"use client";
+
+import { Box, Typography } from "@mui/material";
 import { usePathname } from "next/navigation";
 import Link from "next/link";
 import { SidebarItem } from "@/types/dashboard/sidebar-item";
 
-export default function Sidebar({ items }: { items: SidebarItem[] }) {
+export default function Sidebar({
+  items,
+  mobile = false,
+  onNavigate,
+}: {
+  items: SidebarItem[];
+  mobile?: boolean;
+  onNavigate?: () => void;
+}) {
   const pathname = usePathname();
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [itemsState, setItemsState] = useState<SidebarItem[]>([]);
+  const content = (
+    <>
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          py: 1.5,
+          borderBottom: "1px solid",
+          borderColor: "divider",
+        }}
+      >
+        <Typography
+          variant="h6"
+          sx={{
+            fontWeight: 700,
+            color: "text.primary",
+            letterSpacing: 0.2,
+          }}
+        >
+          Handcrafted Haven
+        </Typography>
+      </Box>
 
-  const handleItemClick = (item: SidebarItem) => {
-    items.forEach((item) => {
-      item.active = false;
-    });
-    item.active = true;
-    setItemsState([...items, item]);
-  };
+      <Box sx={{ display: "flex", flexDirection: "column", gap: 1, p: 1.5 }}>
+        {items.map((item) => {
+          const isActive = item.href === pathname;
 
-  items.forEach((item) => {
-    item.active = false;
-  });
+          return (
+            <Link
+              key={item.href}
+              href={item.href}
+              onClick={onNavigate}
+              style={{ textDecoration: "none", color: "inherit" }}
+            >
+              <Box
+                sx={{
+                  display: "flex",
+                  alignItems: "center",
+                  gap: 1.5,
+                  px: 1.5,
+                  py: 1.25,
+                  borderRadius: 2,
+                  backgroundColor: isActive ? "primary.main" : "transparent",
+                  color: isActive ? "#FFFFFF" : "text.primary",
+                  transition: "all 0.2s ease",
+                  "&:hover": {
+                    backgroundColor: isActive ? "primary.main" : "action.hover",
+                  },
+                }}
+              >
+                <Box
+                  sx={{
+                    width: 20,
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                  }}
+                >
+                  <item.icon stroke={1.5} size="1.5rem" />
+                </Box>
 
-  const item = items.find((item) => item.href === pathname);
+                <Typography
+                  variant="body1"
+                  sx={{
+                    textTransform: "capitalize",
+                    fontWeight: isActive ? 600 : 500,
+                    color: "inherit",
+                  }}
+                >
+                  {item.label}
+                </Typography>
+              </Box>
+            </Link>
+          );
+        })}
+      </Box>
+    </>
+  );
 
-  if (item) {
-    item.active = true;
+  if (mobile) {
+    return (
+      <Box
+        sx={{
+          width: 270,
+          height: "100%",
+          backgroundColor: "background.paper",
+        }}
+      >
+        {content}
+      </Box>
+    );
   }
 
   return (
     <Box
       sx={{
-        width: "270px",
+        display: { xs: "none", md: "block" },
+        width: 270,
         flexShrink: 0,
         height: "100vh",
         position: "fixed",
         top: 0,
         left: 0,
         zIndex: 2000,
-        backgroundColor: "var(--sidebar-background)",
-        borderRight: `1px solid ${theme.palette.divider}`,
-        paddingX: 0,
+        backgroundColor: "background.paper",
+        borderRight: "1px solid",
+        borderColor: "divider",
+        px: 0,
       }}
     >
-      <Box
-        sx={{
-          display: "flex",
-          flexDirection: "row",
-          justifyContent: "center",
-          alignItems: "center",
-          py: 1,
-          verticalAlign: "middle",
-          left: -10,
-          position: "relative",
-        }}
-      >
-        <Box gap={0} position="relative" color={theme.palette.grey[600]}>
-          <Typography
-            variant="h1"
-            sx={{ fontSize: "1.3rem", fontWeight: 600, lineHeight: "2.75rem" }}
-          >
-            Handcrafted Haven
-          </Typography>
-        </Box>
-      </Box>
-      <Box flexDirection="column" display="flex" gap={1} p={1}>
-        {items.map((item) => (
-          <Button
-            component={Link}
-            key={item.href}
-            href={item.href}
-            sx={{
-              margin: "0 2px",
-              justifyContent: "left",
-              backgroundColor: item.active
-                ? "var(--sidebar-item-active)"
-                : "var(--sidebar-background)",
-              boxShadow: "none",
-              gap: 1,
-              "&:hover": {
-                backgroundColor: item.active
-                  ? "var(--sidebar-item-active)"
-                  : "var(--sidebar-item-hover)",
-                boxShadow: "none",
-              },
-            }}
-            onClick={() => handleItemClick(item)}
-          >
-            <Box
-              width={20}
-              display="flex"
-              alignItems="center"
-              justifyContent="center"
-              mx={1}
-            >
-              <item.icon stroke={1.5} size="1.5rem" />
-            </Box>
-            <Typography
-              variant="body1"
-              color={theme.palette.grey[600]}
-              sx={{ textTransform: "capitalize" }}
-            >
-              {item.label}
-            </Typography>
-          </Button>
-        ))}
-      </Box>
+      {content}
     </Box>
   );
 }

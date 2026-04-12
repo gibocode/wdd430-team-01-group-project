@@ -2,6 +2,19 @@ import Header from "../components/Header";
 import ProductCard from "../components/ProductCard";
 import Footer from "../components/Footer";
 import { fetchProducts } from "@/lib/services/products";
+import {
+  Box,
+  Button,
+  Container,
+  FormControl,
+  InputLabel,
+  MenuItem,
+  Select,
+  SelectChangeEvent,
+  Typography,
+  Alert,
+} from "@mui/material";
+import NextLink from "../components/NextLink";
 
 type CatalogPageProps = {
   searchParams: Promise<{
@@ -53,122 +66,88 @@ export default async function CatalogPage({ searchParams }: CatalogPageProps) {
     <>
       <Header />
 
-      <main
-        style={{
-          padding: "1.5rem",
-          maxWidth: "1000px",
-          margin: "0 auto",
-        }}
-      >
-        <section>
-          <h2>Catalog</h2>
-          <p style={{ color: "#555" }}>
+      <Container maxWidth="lg" sx={{ py: 4 }}>
+        <Box component="section">
+          <Typography variant="h4" sx={{ fontWeight: 700, color: "text.primary" }}>
+            Catalog
+          </Typography>
+          <Typography sx={{ mt: 1, color: "text.secondary" }}>
             Browse handcrafted items from talented artisans.
-          </p>
-        </section>
+          </Typography>
+        </Box>
 
         {error && (
-          <p
-            style={{
-              marginTop: "1rem",
-              padding: "0.75rem 1rem",
-              backgroundColor: "#fff4e5",
-              color: "#8a5a00",
-              borderRadius: "6px",
-            }}
-          >
+          <Alert severity="warning" sx={{ mt: 3 }}>
             {error}
-          </p>
+          </Alert>
         )}
 
-        <section
-          style={{
-            display: "flex",
-            gap: "1rem",
-            flexWrap: "wrap",
-            marginTop: "1.5rem",
-          }}
-        >
-          <form
+        <Box component="section" sx={{ mt: 4 }}>
+          <Box
+            component="form"
             method="GET"
-            style={{
+            sx={{
               display: "flex",
-              gap: "1rem",
+              gap: 2,
               flexWrap: "wrap",
-              width: "100%",
+              alignItems: "center",
             }}
           >
-            <select
-              name="price"
-              defaultValue={params.price ?? ""}
-              style={{
-                padding: "0.5rem",
-                borderRadius: "4px",
-                minWidth: "180px",
-                flex: "1 1 180px",
-              }}
-            >
-              <option value="">Filter by price</option>
-              <option value="0-20">$0 - $20</option>
-              <option value="21-50">$21 - $50</option>
-              <option value="51+">$51+</option>
-            </select>
+            <FormControl size="small" sx={{ minWidth: 180, flex: "1 1 180px" }}>
+              <InputLabel id="price-label">Filter by price</InputLabel>
+              <Select
+                labelId="price-label"
+                name="price"
+                defaultValue={params.price ?? ""}
+                label="Filter by price"
+              >
+                <MenuItem value="">Filter by price</MenuItem>
+                <MenuItem value="0-20">$0 - $20</MenuItem>
+                <MenuItem value="21-50">$21 - $50</MenuItem>
+                <MenuItem value="51+">$51+</MenuItem>
+              </Select>
+            </FormControl>
 
-            <select
-              name="sort"
-              defaultValue={params.sort ?? ""}
-              style={{
-                padding: "0.5rem",
-                borderRadius: "4px",
-                minWidth: "180px",
-                flex: "1 1 180px",
-              }}
-            >
-              <option value="">Sort by</option>
-              <option value="low-high">Price: Low to High</option>
-              <option value="high-low">Price: High to Low</option>
-            </select>
+            <FormControl size="small" sx={{ minWidth: 180, flex: "1 1 180px" }}>
+              <InputLabel id="sort-label">Sort by</InputLabel>
+              <Select
+                labelId="sort-label"
+                name="sort"
+                defaultValue={params.sort ?? ""}
+                label="Sort by"
+              >
+                <MenuItem value="">Sort by</MenuItem>
+                <MenuItem value="low-high">Price: Low to High</MenuItem>
+                <MenuItem value="high-low">Price: High to Low</MenuItem>
+              </Select>
+            </FormControl>
 
-            <button
-              type="submit"
-              style={{
-                padding: "0.5rem 1rem",
-                borderRadius: "4px",
-                border: "1px solid #ccc",
-                backgroundColor: "#fff",
-                cursor: "pointer",
-              }}
-            >
+            <Button type="submit" variant="contained" color="primary">
               Apply
-            </button>
+            </Button>
 
-            <a
+            <Button
+              component={NextLink}
               href="/catalog"
-              style={{
-                display: "inline-flex",
-                alignItems: "center",
-                padding: "0.5rem 1rem",
-                borderRadius: "4px",
-                border: "1px solid #ccc",
-                textDecoration: "none",
-                color: "inherit",
-                backgroundColor: "#fff",
-              }}
+              variant="outlined"
+              color="primary"
             >
               Clear
-            </a>
-          </form>
-        </section>
+            </Button>
+          </Box>
+        </Box>
 
-        <section style={{ marginTop: "2rem" }}>
+        <Box component="section" sx={{ mt: 4 }}>
           {filteredProducts.length === 0 ? (
-            <p style={{ color: "#555" }}>No products found.</p>
+            <Typography sx={{ color: "text.secondary" }}>
+              No products found.
+            </Typography>
           ) : (
-            <div
-              style={{
+            <Box
+              sx={{
                 display: "grid",
                 gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))",
-                gap: "1.5rem",
+                gap: 3,
               }}
             >
               {filteredProducts.map((product) => (
@@ -181,10 +160,10 @@ export default async function CatalogPage({ searchParams }: CatalogPageProps) {
                   image={product.image}
                 />
               ))}
-            </div>
+            </Box>
           )}
-        </section>
-      </main>
+        </Box>
+      </Container>
 
       <Footer />
     </>

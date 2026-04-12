@@ -1,5 +1,14 @@
+"use client";
+
 import Link from "next/link";
 import Image from "next/image";
+import {
+  Card,
+  CardActionArea,
+  CardContent,
+  Typography,
+  Box,
+} from "@mui/material";
 
 type ProductCardProps = {
   id: string;
@@ -17,40 +26,60 @@ export default function ProductCard({
   image,
 }: ProductCardProps) {
   return (
-    <Link
-      href={`/products/${id}`}
-      style={{ textDecoration: "none", color: "inherit" }}
+    <Card
+      sx={{
+        height: "100%",
+        borderRadius: 2,
+        boxShadow: 1,
+        backgroundColor: "background.paper",
+        transition: "transform 0.2s ease, box-shadow 0.2s ease",
+        "&:hover": {
+          transform: "translateY(-4px)",
+          boxShadow: 3,
+        },
+      }}
     >
-      <article
-        style={{
-          border: "1px solid #ddd",
-          borderRadius: "8px",
-          padding: "1rem",
-          textAlign: "center",
-          backgroundColor: "white",
-          cursor: "pointer",
-          transition: "transform 0.2s",
-        }}
-      >
-        <Image
-          src={image}
-          alt={name}
-          width={200}
-          height={200}
-          style={{
+      <CardActionArea component={Link} href={`/products/${id}`}>
+        <Box
+          sx={{
+            position: "relative",
             width: "100%",
-            height: "auto",
-            borderRadius: "6px",
-            marginBottom: "0.5rem",
+            height: 200,
           }}
-        />
+        >
+          <Image
+            src={image}
+            alt={name}
+            fill
+            style={{ objectFit: "cover" }}
+          />
+        </Box>
 
-        <h3 style={{ margin: "0.5rem 0" }}>{name}</h3>
+        <CardContent>
+          <Typography variant="h6" sx={{ fontWeight: 600 }}>
+            {name}
+          </Typography>
 
-        <p style={{ fontSize: "0.9rem", color: "#555" }}>{description}</p>
+          <Typography
+            variant="body2"
+            color="text.secondary"
+            sx={{ mt: 0.5 }}
+          >
+            {description}
+          </Typography>
 
-        <p style={{ fontWeight: "bold", marginTop: "0.5rem" }}>{price}</p>
-      </article>
-    </Link>
+          <Typography
+            variant="subtitle1"
+            sx={{
+              mt: 1,
+              fontWeight: 700,
+              color: "primary.main",
+            }}
+          >
+            {price}
+          </Typography>
+        </CardContent>
+      </CardActionArea>
+    </Card>
   );
 }

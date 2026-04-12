@@ -3,6 +3,20 @@
 import { FormEvent, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/lib/context/AuthProvider";
+import NextLink from "./NextLink";
+import {
+  Alert,
+  Box,
+  Button,
+  CircularProgress,
+  FormControl,
+  InputLabel,
+  Link as MuiLink,
+  MenuItem,
+  Select,
+  TextField,
+  Typography,
+} from "@mui/material";
 
 type ReviewFormProps = {
   productId: string;
@@ -54,80 +68,72 @@ export default function ReviewForm({ productId }: ReviewFormProps) {
 
   if (loading) {
     return (
-      <p style={{ color: "#555", marginTop: "1rem" }}>Checking login...</p>
+      <Box sx={{ mt: 2, display: "flex", alignItems: "center", gap: 1.5 }}>
+        <CircularProgress size={20} />
+        <Typography color="text.secondary">Checking login...</Typography>
+      </Box>
     );
   }
 
   if (!isLoggedIn) {
     return (
-      <p style={{ color: "#555", marginTop: "1rem" }}>
+      <Typography sx={{ mt: 2, color: "text.secondary" }}>
         Please{" "}
-        <a href="/login" style={{ color: "#1976D2" }}>
+        <MuiLink
+          component={NextLink}
+          href="/login"
+          color="primary"
+          underline="hover"
+        >
           log in
-        </a>{" "}
+        </MuiLink>{" "}
         to leave a review.
-      </p>
+      </Typography>
     );
   }
 
   return (
-    <form onSubmit={handleSubmit} style={{ marginTop: "1rem" }}>
-      <div style={{ display: "flex", flexDirection: "column", gap: "1rem" }}>
-        {error && <p style={{ color: "#b00020", margin: 0 }}>{error}</p>}
+    <Box component="form" onSubmit={handleSubmit} sx={{ mt: 2 }}>
+      <Box sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
+        {error && <Alert severity="error">{error}</Alert>}
 
-        <label>
-          <span style={{ display: "block", marginBottom: "0.5rem" }}>
-            Rating
-          </span>
-          <select
+        <FormControl size="small" sx={{ maxWidth: 220 }}>
+          <InputLabel id="review-rating-label">Rating</InputLabel>
+          <Select
+            labelId="review-rating-label"
             value={rating}
+            label="Rating"
             onChange={(e) => setRating(e.target.value)}
-            style={{ padding: "0.5rem", borderRadius: "4px" }}
           >
-            <option value="5">5 - Excellent</option>
-            <option value="4">4 - Very Good</option>
-            <option value="3">3 - Good</option>
-            <option value="2">2 - Fair</option>
-            <option value="1">1 - Poor</option>
-          </select>
-        </label>
+            <MenuItem value="5">5 - Excellent</MenuItem>
+            <MenuItem value="4">4 - Very Good</MenuItem>
+            <MenuItem value="3">3 - Good</MenuItem>
+            <MenuItem value="2">2 - Fair</MenuItem>
+            <MenuItem value="1">1 - Poor</MenuItem>
+          </Select>
+        </FormControl>
 
-        <label>
-          <span style={{ display: "block", marginBottom: "0.5rem" }}>
-            Review
-          </span>
-          <textarea
-            value={text}
-            onChange={(e) => setText(e.target.value)}
-            rows={4}
-            required
-            placeholder="Share your thoughts about this product"
-            style={{
-              width: "100%",
-              padding: "0.75rem",
-              borderRadius: "6px",
-              border: "1px solid #ccc",
-            }}
-          />
-        </label>
+        <TextField
+          label="Review"
+          value={text}
+          onChange={(e) => setText(e.target.value)}
+          required
+          multiline
+          rows={4}
+          placeholder="Share your thoughts about this product"
+          fullWidth
+        />
 
-        <button
+        <Button
           type="submit"
+          variant="contained"
+          color="primary"
           disabled={isSubmitting}
-          style={{
-            padding: "0.75rem 1rem",
-            backgroundColor: "#1976D2",
-            color: "white",
-            border: "none",
-            borderRadius: "6px",
-            cursor: "pointer",
-            width: "fit-content",
-            opacity: isSubmitting ? 0.7 : 1,
-          }}
+          sx={{ alignSelf: "flex-start", textTransform: "none", px: 3 }}
         >
           {isSubmitting ? "Submitting..." : "Submit Review"}
-        </button>
-      </div>
-    </form>
+        </Button>
+      </Box>
+    </Box>
   );
 }
