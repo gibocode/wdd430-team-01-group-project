@@ -3,6 +3,14 @@ import Footer from "../components/Footer";
 import Image from "next/image";
 import Link from "next/link";
 import { fetchSellers } from "@/lib/services/sellers";
+import {
+  Alert,
+  Box,
+  Card,
+  CardContent,
+  Container,
+  Typography,
+} from "@mui/material";
 
 export default async function SellersPage() {
   const { sellers, error } = await fetchSellers();
@@ -11,93 +19,115 @@ export default async function SellersPage() {
     <>
       <Header />
 
-      <main
-        style={{
-          padding: "1.5rem",
-          maxWidth: "1000px",
-          margin: "0 auto",
-        }}
-      >
-        <section>
-          <h2>Sellers</h2>
-          <p style={{ color: "#555" }}>
+      <Container maxWidth="lg" sx={{ py: 4 }}>
+        <Box component="section">
+          <Typography
+            variant="h4"
+            sx={{ fontWeight: 700, color: "text.primary" }}
+          >
+            Sellers
+          </Typography>
+          <Typography sx={{ mt: 1, color: "text.secondary" }}>
             Explore the artisans behind the handcrafted products.
-          </p>
-        </section>
+          </Typography>
+        </Box>
 
         {error && (
-          <p
-            style={{
-              marginTop: "1rem",
-              padding: "0.75rem 1rem",
-              backgroundColor: "#fff4e5",
-              color: "#8a5a00",
-              borderRadius: "6px",
-            }}
-          >
+          <Alert severity="warning" sx={{ mt: 3 }}>
             {error}
-          </p>
+          </Alert>
         )}
 
-        <section
-          style={{
-            marginTop: "2rem",
+        <Box
+          component="section"
+          sx={{
+            mt: 4,
             display: "grid",
             gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))",
-            gap: "1.5rem",
+            gap: 3,
           }}
         >
           {sellers.length === 0 ? (
-            <p style={{ color: "#555" }}>No sellers available yet.</p>
+            <Typography sx={{ color: "text.secondary" }}>
+              No sellers available yet.
+            </Typography>
           ) : (
             sellers.map((seller) => (
-              <article
+              <Link
                 key={seller.id}
-                style={{
-                  border: "1px solid #ddd",
-                  borderRadius: "8px",
-                  padding: "1rem",
-                  backgroundColor: "#fff",
-                }}
+                href={`/sellers/${seller.id}`}
+                style={{ textDecoration: "none", color: "inherit" }}
               >
-                <Image
-                  src={seller.profileUrl}
-                  alt={seller.shopName}
-                  width={320}
-                  height={220}
-                  style={{
-                    width: "100%",
-                    height: "auto",
-                    borderRadius: "6px",
-                    marginBottom: "1rem",
-                  }}
-                />
-
-                <h3 style={{ marginTop: 0 }}>{seller.shopName}</h3>
-
-                <p style={{ color: "#1976D2", fontWeight: "bold" }}>
-                  {seller.sellerName}
-                </p>
-
-                <p style={{ color: "#555", marginTop: "0.5rem" }}>
-                  {seller.tagline}
-                </p>
-
-                <Link
-                  href={`/sellers/${seller.id}`}
-                  style={{
-                    display: "inline-block",
-                    marginTop: "1rem",
-                    color: "#1976D2",
+                <Card
+                  sx={{
+                    backgroundColor: "background.paper",
+                    borderRadius: 2,
+                    boxShadow: 1,
+                    overflow: "hidden",
+                    transition: "transform 0.2s ease, box-shadow 0.2s ease",
+                    "&:hover": {
+                      transform: "translateY(-4px)",
+                      boxShadow: 3,
+                    },
                   }}
                 >
-                  View seller profile
-                </Link>
-              </article>
+                  <Box
+                    sx={{
+                      position: "relative",
+                      width: "100%",
+                      height: 220,
+                    }}
+                  >
+                    <Image
+                      src={seller.profileUrl}
+                      alt={seller.shopName}
+                      fill
+                      style={{ objectFit: "cover" }}
+                    />
+                  </Box>
+
+                  <CardContent>
+                    <Typography variant="h6" sx={{ fontWeight: 700 }}>
+                      {seller.shopName}
+                    </Typography>
+
+                    <Typography
+                      sx={{
+                        mt: 0.5,
+                        fontWeight: 600,
+                        color: "primary.main",
+                      }}
+                    >
+                      {seller.sellerName}
+                    </Typography>
+
+                    <Typography
+                      variant="body2"
+                      sx={{
+                        mt: 1,
+                        color: "text.secondary",
+                        lineHeight: 1.6,
+                      }}
+                    >
+                      {seller.tagline}
+                    </Typography>
+
+                    <Typography
+                      sx={{
+                        mt: 2,
+                        color: "primary.main",
+                        fontWeight: 500,
+                      }}
+                    >
+                      View seller profile
+                    </Typography>
+                  </CardContent>
+                </Card>
+              </Link>
             ))
           )}
-        </section>
-      </main>
+        </Box>
+      </Container>
 
       <Footer />
     </>

@@ -9,6 +9,7 @@ import {
   CardContent,
   CardActions,
   Card,
+  Box,
 } from "@mui/material";
 import { useState } from "react";
 import { IconTrash } from "@tabler/icons-react";
@@ -20,10 +21,12 @@ export default function DeleteProductButtonWithModal({
   product: Product;
 }) {
   const [openDeleteProductModal, setOpenDeleteProductModal] = useState(false);
+
   const handleDeleteProduct = () => {
     console.log(product);
     console.log("Delete product");
   };
+
   return (
     <>
       <Button
@@ -31,9 +34,11 @@ export default function DeleteProductButtonWithModal({
         color="error"
         startIcon={<IconTrash />}
         onClick={() => setOpenDeleteProductModal(true)}
+        sx={{ textTransform: "none", fontWeight: 600 }}
       >
         Delete
       </Button>
+
       <Modal
         open={openDeleteProductModal}
         onClose={() => setOpenDeleteProductModal(false)}
@@ -42,44 +47,80 @@ export default function DeleteProductButtonWithModal({
           justifyContent: "center",
           alignItems: "center",
           zIndex: 2000,
+          px: 2,
         }}
       >
-        <Card>
-          <CardHeader title="Delete Product" />
-          <Divider />
-          <CardContent>
-            <Typography variant="h6">
-              Are you sure you want to delete this product?
-            </Typography>
-          </CardContent>
-          <Divider />
-          <CardActions
+        <Box sx={{ width: "100%", maxWidth: 460 }}>
+          <Card
             sx={{
-              display: "flex",
-              justifyContent: "center",
-              gap: 2,
-              padding: 2,
+              backgroundColor: "background.paper",
+              borderRadius: 2,
+              boxShadow: 3,
             }}
           >
-            <Button
-              variant="contained"
-              color="error"
-              onClick={() => {
-                setOpenDeleteProductModal(false);
-                handleDeleteProduct();
+            <CardHeader
+              title="Delete Product"
+              slotProps={{
+                title: {
+                  sx: {
+                    fontSize: "1.5rem",
+                    fontWeight: 700,
+                  },
+                },
+              }}
+            />
+
+            <Divider />
+
+            <CardContent>
+              <Typography variant="body1" sx={{ color: "text.primary" }}>
+                Are you sure you want to delete{" "}
+                <Box component="span" sx={{ fontWeight: 700 }}>
+                  {product.title}
+                </Box>
+                ?
+              </Typography>
+
+              <Typography sx={{ mt: 1, color: "text.secondary" }}>
+                This action cannot be undone.
+              </Typography>
+            </CardContent>
+
+            <Divider />
+
+            <CardActions
+              sx={{
+                display: "flex",
+                justifyContent: "flex-end",
+                gap: 1.5,
+                p: 2,
               }}
             >
-              Delete
-            </Button>
-            <Button
-              variant="outlined"
-              color="secondary"
-              onClick={() => setOpenDeleteProductModal(false)}
-            >
-              Cancel
-            </Button>
-          </CardActions>
-        </Card>
+              <Button
+                type="button"
+                variant="outlined"
+                color="secondary"
+                onClick={() => setOpenDeleteProductModal(false)}
+                sx={{ textTransform: "none", fontWeight: 600 }}
+              >
+                Cancel
+              </Button>
+
+              <Button
+                type="button"
+                variant="contained"
+                color="error"
+                onClick={() => {
+                  setOpenDeleteProductModal(false);
+                  handleDeleteProduct();
+                }}
+                sx={{ textTransform: "none", fontWeight: 600 }}
+              >
+                Delete
+              </Button>
+            </CardActions>
+          </Card>
+        </Box>
       </Modal>
     </>
   );

@@ -2,6 +2,8 @@
 
 import Link from "next/link";
 import { useAuth } from "@/lib/context/AuthProvider";
+import { Box } from "@mui/material";
+import theme from "@/utils/theme";
 
 type Props = {
   mobile?: boolean;
@@ -11,73 +13,68 @@ type Props = {
 export default function AuthNavLinks({ mobile = false, onNavigate }: Props) {
   const { user } = useAuth();
 
-  const linkStyle = {
+  const baseStyle = {
     textDecoration: "none",
     color: "inherit",
+    fontWeight: 500,
+    transition: "all 0.2s ease",
+    cursor: "pointer",
   };
 
-  const commonProps = {
-    onClick: onNavigate,
-    style: linkStyle,
+  const desktopStyle = {
+    ...baseStyle,
+    "&:hover": {
+      color: theme.palette.secondary.main, // teal accent
+    },
   };
 
-  if (mobile) {
-    return (
-      <>
-        <Link href="/" {...commonProps}>
-          Home
-        </Link>
-        <Link href="/catalog" {...commonProps}>
-          Catalog
-        </Link>
-        <Link href="/sellers" {...commonProps}>
-          Sellers
-        </Link>
+  const mobileStyle = {
+    ...baseStyle,
+    color: theme.palette.text.primary,
+    padding: "6px 0",
+    "&:hover": {
+      color: theme.palette.primary.main, // indigo on hover
+    },
+  };
 
-        {user ? (
-          <>
-            <Link href="/dashboard" {...commonProps}>
-              Dashboard
-            </Link>
-            <a href="/logout" onClick={onNavigate} style={linkStyle}>
-              Logout
-            </a>
-          </>
-        ) : (
-          <Link href="/login" {...commonProps}>
-            Login
-          </Link>
-        )}
-      </>
-    );
-  }
-
-  return (
+  const renderLinks = (style: React.CSSProperties) => (
     <>
-      <Link href="/" style={linkStyle}>
+      <Link href="/" onClick={onNavigate} style={style}>
         Home
       </Link>
-      <Link href="/catalog" style={linkStyle}>
+      <Link href="/catalog" onClick={onNavigate} style={style}>
         Catalog
       </Link>
-      <Link href="/sellers" style={linkStyle}>
+      <Link href="/sellers" onClick={onNavigate} style={style}>
         Sellers
       </Link>
 
       {user ? (
         <>
-          <Link href="/dashboard" style={linkStyle}>
+          <Link href="/dashboard" onClick={onNavigate} style={style}>
             Dashboard
           </Link>
-          <a href="/logout" style={linkStyle}>
+          <a href="/logout" onClick={onNavigate} style={style}>
             Logout
           </a>
         </>
       ) : (
-        <Link href="/login" style={linkStyle}>
+        <Link href="/login" onClick={onNavigate} style={style}>
           Login
         </Link>
       )}
     </>
+  );
+
+  return (
+    <Box
+      sx={{
+        display: "flex",
+        flexDirection: mobile ? "column" : "row",
+        gap: mobile ? 1 : 3,
+      }}
+    >
+      {renderLinks(mobile ? mobileStyle : desktopStyle)}
+    </Box>
   );
 }

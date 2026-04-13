@@ -1,38 +1,59 @@
+"use client";
+
 import Link from "next/link";
+import { Box, Typography, Button, Container } from "@mui/material";
 
 export default function HeroBanner() {
   return (
-    <section
-      style={{
-        padding: "3rem 1rem",
-        textAlign: "center",
-        backgroundColor: "#f5f5f5",
-        marginTop: "1rem",
-        borderRadius: "8px",
+    <Box
+      component="section"
+      sx={{
+        mt: 2,
+        py: { xs: 5, md: 7 },
+        backgroundColor: "background.default",
+        borderRadius: 2,
       }}
     >
-      <h2 style={{ fontSize: "2rem", marginBottom: "1rem" }}>
-        Discover Unique Handmade Creations
-      </h2>
+      <Container maxWidth="md" sx={{ textAlign: "center" }}>
+        <Typography
+          variant="h3"
+          sx={{
+            fontWeight: 700,
+            color: "text.primary",
+            mb: 2,
+          }}
+        >
+          Discover Unique Handmade Creations
+        </Typography>
 
-      <p style={{ maxWidth: "600px", margin: "0 auto 1.5rem auto" }}>
-        Explore handcrafted products from talented artisans and support a
-        creative community.
-      </p>
+        <Typography
+          variant="body1"
+          sx={{
+            color: "text.secondary",
+            mb: 3,
+          }}
+        >
+          Explore handcrafted products from talented artisans and support a
+          creative community.
+        </Typography>
 
-      <Link
-        href="/catalog"
-        style={{
-          display: "inline-block",
-          padding: "0.75rem 1.5rem",
-          backgroundColor: "#1976D2",
-          color: "white",
-          borderRadius: "5px",
-          textDecoration: "none",
-        }}
-      >
-        Browse Catalog
-      </Link>
-    </section>
+        <Button
+          component={Link}
+          href="/catalog"
+          variant="contained"
+          color="primary"
+          size="large"
+          sx={{
+            px: 4,
+            py: 1.2,
+            borderRadius: 2,
+            textTransform: "none",
+            fontWeight: 600,
+          }}
+        >
+          Browse Catalog
+        </Button>
+      </Container>
+    </Box>
   );
 }

@@ -40,39 +40,49 @@ export default function EditProductButtonWithModal({
   const [image, setImage] = useState(product.image);
   const [formValues, setFormValues] = useState({
     name: product.title,
-    description: product.description,
+    description: product.description ?? "",
     price: product.price,
   });
+
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
   };
+
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setFormValues({ ...formValues, [event.target.name]: event.target.value });
+    const { name, value } = event.target;
+    setFormValues((prev) => ({
+      ...prev,
+      [name]: name === "price" ? Number(value) : value,
+    }));
   };
+
   const handleRemoveImage = () => {
-    const updatedProduct = { ...product, image: "" };
-    setImage(updatedProduct.image);
+    setImage("");
   };
+
   const handleUploadImage = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setImage(reader.result as string);
-      };
-    }
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onloadend = () => {
+      setImage(reader.result as string);
+    };
+    reader.readAsDataURL(file);
   };
+
   return (
     <>
       <Button
         variant="contained"
         color="primary"
         startIcon={<IconEdit />}
-        sx={{ marginRight: 1 }}
+        sx={{ mr: 1, textTransform: "none", fontWeight: 600 }}
         onClick={() => setOpenEditProductModal(true)}
       >
         Edit
       </Button>
+
       <Modal
         open={openEditProductModal}
         onClose={() => setOpenEditProductModal(false)}
@@ -81,9 +91,10 @@ export default function EditProductButtonWithModal({
           justifyContent: "center",
           alignItems: "center",
           zIndex: 2000,
+          px: 2,
         }}
-        aria-labelledby="add-product-modal"
-        aria-describedby="add-product-modal-description"
+        aria-labelledby="edit-product-modal"
+        aria-describedby="edit-product-modal-description"
         slotProps={{
           backdrop: {
             sx: {
@@ -92,56 +103,92 @@ export default function EditProductButtonWithModal({
           },
         }}
       >
-        <form onSubmit={handleSubmit}>
-          <Card sx={{ width: "500px", minHeight: "500px" }}>
-            <CardHeader title="Update Product" />
+        <Box
+          component="form"
+          onSubmit={handleSubmit}
+          sx={{ width: "100%", maxWidth: 520 }}
+        >
+          <Card
+            sx={{
+              width: "100%",
+              backgroundColor: "background.paper",
+              borderRadius: 2,
+              boxShadow: 3,
+            }}
+          >
+            <CardHeader
+              title="Update Product"
+              slotProps={{
+                title: {
+                  sx: {
+                    fontSize: "1.5rem",
+                    fontWeight: 700,
+                  },
+                },
+              }}
+            />
+
             <Divider />
+
             <CardContent
-              sx={{ display: "flex", flexDirection: "column", gap: 2 }}
+              sx={{ display: "flex", flexDirection: "column", gap: 2.5 }}
             >
               <FormGroup>
-                <FormControl fullWidth sx={{ marginBottom: 2 }}>
+                <FormControl fullWidth sx={{ mb: 2 }}>
                   <TextField
                     id="product-name"
+                    name="name"
                     label="Product Name"
                     required
                     value={formValues.name}
                     onChange={handleChange}
                   />
                 </FormControl>
-                <FormControl fullWidth sx={{ marginBottom: 2 }}>
-                  {(product.image || image) && (
+
+                <FormControl fullWidth sx={{ mb: 2 }}>
+                  {image ? (
                     <Box
                       display="flex"
                       flexDirection="row"
                       alignItems="center"
                       gap={2}
-                      sx={{ marginBottom: 2 }}
+                      sx={{ mb: 2 }}
                     >
                       <Image
-                        src={product.image}
-                        alt={product.title}
+                        src={image}
+                        alt={formValues.name}
                         width={100}
                         height={100}
-                        style={{ borderRadius: "8px", maxHeight: "100px" }}
+                        style={{
+                          borderRadius: "8px",
+                          objectFit: "cover",
+                          maxHeight: "100px",
+                        }}
                       />
                       <Button
-                        variant="contained"
+                        type="button"
+                        variant="outlined"
                         color="secondary"
                         startIcon={<IconTrash />}
                         onClick={handleRemoveImage}
+                        sx={{ textTransform: "none", fontWeight: 600 }}
                       >
                         Remove Image
                       </Button>
                     </Box>
-                  )}
-                  {!product.image && !image && (
+                  ) : (
                     <Button
                       component="label"
                       role={undefined}
-                      variant="contained"
+                      variant="outlined"
+                      color="primary"
                       tabIndex={-1}
                       startIcon={<IconUpload />}
+                      sx={{
+                        justifyContent: "flex-start",
+                        textTransform: "none",
+                        fontWeight: 500,
+                      }}
                     >
                       Upload Image
                       <VisuallyHiddenInput
@@ -151,9 +198,11 @@ export default function EditProductButtonWithModal({
                     </Button>
                   )}
                 </FormControl>
-                <FormControl fullWidth sx={{ marginBottom: 2 }}>
+
+                <FormControl fullWidth sx={{ mb: 2 }}>
                   <TextField
                     id="product-description"
+                    name="description"
                     label="Product Description"
                     required
                     multiline
@@ -162,40 +211,53 @@ export default function EditProductButtonWithModal({
                     onChange={handleChange}
                   />
                 </FormControl>
-                <FormControl fullWidth sx={{ marginBottom: 2 }}>
+
+                <FormControl fullWidth>
                   <TextField
                     id="product-price"
+                    name="price"
                     label="Product Price"
                     required
                     type="number"
                     value={formValues.price}
                     onChange={handleChange}
+                    inputProps={{ step: "0.01", min: 0 }}
                   />
                 </FormControl>
               </FormGroup>
             </CardContent>
+
             <Divider />
+
             <CardActions
               sx={{
                 display: "flex",
-                justifyContent: "center",
-                gap: 2,
-                padding: 2,
+                justifyContent: "flex-end",
+                gap: 1.5,
+                p: 2,
               }}
             >
               <Button
+                type="button"
                 variant="outlined"
                 color="secondary"
                 onClick={() => setOpenEditProductModal(false)}
+                sx={{ textTransform: "none", fontWeight: 600 }}
               >
                 Cancel
               </Button>
-              <Button variant="contained" color="primary" type="submit">
+
+              <Button
+                variant="contained"
+                color="primary"
+                type="submit"
+                sx={{ textTransform: "none", fontWeight: 600 }}
+              >
                 Update Product
               </Button>
             </CardActions>
           </Card>
-        </form>
+        </Box>
       </Modal>
     </>
   );

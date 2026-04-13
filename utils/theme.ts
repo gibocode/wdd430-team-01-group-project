@@ -1,17 +1,18 @@
+"use client";
+
 import { createTheme } from "@mui/material/styles";
 
 const theme = createTheme({
   palette: {
     primary: {
-      main: "#556cd6",
-      dark: "#1976d2",
+      main: "#5560E8",
     },
     secondary: {
-      main: "#19857b",
+      main: "#009688",
     },
     background: {
-      default: "#ffffff",
-      paper: "#f5f5f5",
+      default: "#FAFAFA",
+      paper: "#FFFFFF",
     },
     text: {
       primary: "#1A1A1A",
@@ -25,7 +26,7 @@ const theme = createTheme({
       500: "#5A6A85",
       600: "#2A3547",
     },
-    divider: "#e5eaef",
+    divider: "#E0E0E0",
   },
 });
 

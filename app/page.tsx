@@ -3,6 +3,7 @@ import HeroBanner from "./components/HeroBanner";
 import ProductCard from "./components/ProductCard";
 import Footer from "./components/Footer";
 import { fetchProducts } from "@/lib/services/products";
+import { Container, Box, Typography, Alert } from "@mui/material";
 
 export default async function Home() {
   const { products, error } = await fetchProducts();
@@ -11,43 +12,34 @@ export default async function Home() {
     <>
       <Header />
 
-      <main
-        style={{
-          padding: "1.5rem",
-          maxWidth: "1000px",
-          margin: "0 auto",
-        }}
-      >
+      <Container maxWidth="lg" sx={{ py: 4 }}>
         <HeroBanner />
 
-        <section style={{ marginTop: "2rem" }}>
-          <h2>Featured Products</h2>
+        <Box component="section" sx={{ mt: 4 }}>
+          <Typography
+            variant="h4"
+            sx={{ fontWeight: 700, color: "text.primary" }}
+          >
+            Featured Products
+          </Typography>
 
           {error && (
-            <p
-              style={{
-                marginTop: "0.75rem",
-                padding: "0.75rem 1rem",
-                backgroundColor: "#fff4e5",
-                color: "#8a5a00",
-                borderRadius: "6px",
-              }}
-            >
+            <Alert severity="warning" sx={{ mt: 2 }}>
               {error}
-            </p>
+            </Alert>
           )}
 
           {products.length === 0 ? (
-            <p style={{ marginTop: "1rem", color: "#555" }}>
+            <Typography sx={{ mt: 2, color: "text.secondary" }}>
               Loading products...
-            </p>
+            </Typography>
           ) : (
-            <div
-              style={{
+            <Box
+              sx={{
                 display: "grid",
                 gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))",
-                gap: "1.5rem",
-                marginTop: "1rem",
+                gap: 3,
+                mt: 2,
               }}
             >
               {products.slice(0, 3).map((product) => (
@@ -60,10 +52,10 @@ export default async function Home() {
                   image={product.image}
                 />
               ))}
-            </div>
+            </Box>
           )}
-        </section>
-      </main>
+        </Box>
+      </Container>
 
       <Footer />
     </>
