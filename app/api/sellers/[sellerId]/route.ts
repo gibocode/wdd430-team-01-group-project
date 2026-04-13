@@ -1,4 +1,5 @@
-import { findSellerById, updateSellerInfo } from "@/models/seller";
+import { findSellerById, updateSellerInfo, createSeller } from "@/models/seller";
+import { findUserById } from "@/models/user";
 import { z } from "zod";
 
 // Seller info data validation
@@ -18,17 +19,31 @@ export async function GET(
   try {
     const { sellerId } = await params;
 
-    // Get seller info
-    const seller = await findSellerById(sellerId);
+    let seller = await findSellerById(sellerId);
 
     if (!seller) {
-      return Response.json(
-        {
-          success: false,
-          message: "Seller not found.",
-        },
-        { status: 404 },
-      );
+      const user = await findUserById(sellerId);
+
+      if (!user) {
+        return Response.json(
+          {
+            success: false,
+            message: "Seller not found.",
+          },
+          { status: 404 },
+        );
+      }
+
+      const defaultName = user.name?.trim() || user.email.split("@")[0];
+
+      seller = await createSeller({
+        sellerId: user._id!,
+        sellerName: defaultName,
+        shopName: `${defaultName}'s Shop`,
+        tagline: "Update your shop tagline",
+        story: "Tell customers about your shop and your products.",
+        profileUrl: "/placeholder.svg",
+      });
     }
 
     return Response.json({
@@ -63,9 +78,9 @@ export async function PUT(
     const success = await updateSellerInfo(sellerId, validated);
 
     return Response.json({
-      success: success,
+      success,
       message: "Seller information updated successfully.",
-      data: body,
+      data: validated,
     });
   } catch (error) {
     console.error(error);
