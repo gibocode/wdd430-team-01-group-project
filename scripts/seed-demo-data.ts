@@ -132,7 +132,8 @@ async function main() {
         _id: new ObjectId("69c2bf249937fc4d71971690"),
         sellerId: aliceId,
         title: "Handwoven Bamboo Basket",
-        image: "https://azure-implicit-magpie-652.mypinata.cloud/ipfs/bafkreifav4ymxepimlnsah7wtwruav5ztyt2oawocsuw52jxibxgpcbj34",
+        image:
+          "https://azure-implicit-magpie-652.mypinata.cloud/ipfs/bafkreifav4ymxepimlnsah7wtwruav5ztyt2oawocsuw52jxibxgpcbj34",
         description: "Eco-friendly basket.",
         price: 25,
         createdAt: now,
@@ -142,7 +143,8 @@ async function main() {
         _id: new ObjectId("69c2bf249937fc4d71971691"),
         sellerId: davidId,
         title: "Handcrafted Ceramic Mug",
-        image: "https://azure-implicit-magpie-652.mypinata.cloud/ipfs/bafkreihyaaualbwqzc7udu7wphopkfgnz37w7sayry6qngluln6i52gjia",
+        image:
+          "https://azure-implicit-magpie-652.mypinata.cloud/ipfs/bafkreihyaaualbwqzc7udu7wphopkfgnz37w7sayry6qngluln6i52gjia",
         description: "Handmade mug.",
         price: 18,
         createdAt: now,
@@ -152,7 +154,8 @@ async function main() {
         _id: new ObjectId("69c2bf249937fc4d71971692"),
         sellerId: evaId,
         title: "Handmade Leather Journal",
-        image: "https://azure-implicit-magpie-652.mypinata.cloud/ipfs/bafkreigyzfraski4awixxqmn4ti57kqowt4cv53hvrancl7wjs3fm64lri",
+        image:
+          "https://azure-implicit-magpie-652.mypinata.cloud/ipfs/bafkreigyzfraski4awixxqmn4ti57kqowt4cv53hvrancl7wjs3fm64lri",
         description: "Premium journal.",
         price: 35,
         createdAt: now,
@@ -162,7 +165,8 @@ async function main() {
         _id: new ObjectId("69c2bf249937fc4d71971693"),
         sellerId: aliceId,
         title: "Hand-knitted Wool Scarf",
-        image: "https://azure-implicit-magpie-652.mypinata.cloud/ipfs/bafkreifs4zbyuzpprd77wnodi4dg5jktpsqcaeos2nxplhctdfn5snxb2u",
+        image:
+          "https://azure-implicit-magpie-652.mypinata.cloud/ipfs/bafkreifs4zbyuzpprd77wnodi4dg5jktpsqcaeos2nxplhctdfn5snxb2u",
         description: "Warm scarf.",
         price: 22,
         createdAt: now,
@@ -172,7 +176,8 @@ async function main() {
         _id: new ObjectId("69c2bf249937fc4d71971694"),
         sellerId: davidId,
         title: "Hand-carved Wooden Spoon Set",
-        image: "https://azure-implicit-magpie-652.mypinata.cloud/ipfs/bafkreicsec72atx7jhp7bg6senbdg7ia3dkw3qz7gawdgzcyq4ya6groqe",
+        image:
+          "https://azure-implicit-magpie-652.mypinata.cloud/ipfs/bafkreicsec72atx7jhp7bg6senbdg7ia3dkw3qz7gawdgzcyq4ya6groqe",
         description: "Wooden spoons.",
         price: 15,
         createdAt: now,
@@ -182,7 +187,8 @@ async function main() {
         _id: new ObjectId("69c2bf249937fc4d71971695"),
         sellerId: evaId,
         title: "Hand-painted Ceramic Vase",
-        image: "https://azure-implicit-magpie-652.mypinata.cloud/ipfs/bafkreicianawvdmbm3dxb6ztxjwdony7urnmpiploo5iofxvtax4vcgsvm",
+        image:
+          "https://azure-implicit-magpie-652.mypinata.cloud/ipfs/bafkreicianawvdmbm3dxb6ztxjwdony7urnmpiploo5iofxvtax4vcgsvm",
         description: "Decorative vase.",
         price: 40,
         createdAt: now,
@@ -192,7 +198,8 @@ async function main() {
         _id: new ObjectId("69c2bf249937fc4d71971696"),
         sellerId: aliceId,
         title: "Handwoven Cotton Tote Bag",
-        image: "https://azure-implicit-magpie-652.mypinata.cloud/ipfs/bafybeia2zdbuwebwd75nqxytyxnnybzkyotdfxg3ak2sxkxfki4tkwmrae",
+        image:
+          "https://azure-implicit-magpie-652.mypinata.cloud/ipfs/bafybeia2zdbuwebwd75nqxytyxnnybzkyotdfxg3ak2sxkxfki4tkwmrae",
         description: "Reusable tote.",
         price: 20,
         createdAt: now,
@@ -202,7 +209,8 @@ async function main() {
         _id: new ObjectId("69c2bf249937fc4d71971697"),
         sellerId: davidId,
         title: "Hand-poured Soy Candle",
-        image: "https://azure-implicit-magpie-652.mypinata.cloud/ipfs/bafkreiavjxfqkgmxg4hw74hfjubw3y2z7inmj5la6dy53t6grypg6z7cwi",
+        image:
+          "https://azure-implicit-magpie-652.mypinata.cloud/ipfs/bafkreiavjxfqkgmxg4hw74hfjubw3y2z7inmj5la6dy53t6grypg6z7cwi",
         description: "Scented candle.",
         price: 16,
         createdAt: now,
@@ -212,7 +220,8 @@ async function main() {
         _id: new ObjectId("69c2bf249937fc4d71971698"),
         sellerId: evaId,
         title: "Handcrafted Beaded Necklace",
-        image: "https://azure-implicit-magpie-652.mypinata.cloud/ipfs/bafybeigabn5pto7u2ran4cgkeimegvlidp6kywnh4nmstfkuqmtzrvwyga",
+        image:
+          "https://azure-implicit-magpie-652.mypinata.cloud/ipfs/bafybeigabn5pto7u2ran4cgkeimegvlidp6kywnh4nmstfkuqmtzrvwyga",
         description: "Elegant necklace.",
         price: 30,
         createdAt: now,
@@ -222,7 +231,8 @@ async function main() {
         _id: new ObjectId("69c2bf249937fc4d71971699"),
         sellerId: aliceId,
         title: "Hand-carved Wooden Jewelry Box",
-        image: "https://azure-implicit-magpie-652.mypinata.cloud/ipfs/bafybeiazgv2clph37pcxmkt3sgnlvagkntardnq3tsosvxnh42hvjbwmdi",
+        image:
+          "https://azure-implicit-magpie-652.mypinata.cloud/ipfs/bafybeiazgv2clph37pcxmkt3sgnlvagkntardnq3tsosvxnh42hvjbwmdi",
         description: "Wooden box.",
         price: 55,
         createdAt: now,

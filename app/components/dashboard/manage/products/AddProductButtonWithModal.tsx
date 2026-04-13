@@ -231,7 +231,12 @@ export default function AddProductButtonWithModal({
 
                 <FormControl fullWidth sx={{ mb: 2 }}>
                   {formValues.image ? (
-                    <Box display="flex" alignItems="center" gap={2} sx={{ mb: 2 }}>
+                    <Box
+                      display="flex"
+                      alignItems="center"
+                      gap={2}
+                      sx={{ mb: 2 }}
+                    >
                       <Image
                         src={formValues.image}
                         alt={formValues.title || "Uploaded product image"}
@@ -261,9 +266,7 @@ export default function AddProductButtonWithModal({
                       variant="outlined"
                       color="primary"
                       tabIndex={-1}
-                      startIcon={
-                        isUploadingImage ? undefined : <IconUpload />
-                      }
+                      startIcon={isUploadingImage ? undefined : <IconUpload />}
                       sx={{
                         justifyContent: "flex-start",
                         textTransform: "none",

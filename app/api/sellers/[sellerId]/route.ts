@@ -1,4 +1,8 @@
-import { findSellerById, updateSellerInfo, createSeller } from "@/models/seller";
+import {
+  findSellerById,
+  updateSellerInfo,
+  createSeller,
+} from "@/models/seller";
 import { findUserById } from "@/models/user";
 import { z } from "zod";
 

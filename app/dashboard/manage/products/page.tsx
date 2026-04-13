@@ -85,7 +85,13 @@ export default async function ManageProductsPage() {
           ) : (
             <>
               {/* Mobile / small screens */}
-              <Box sx={{ display: { xs: "flex", md: "none" }, flexDirection: "column", gap: 2 }}>
+              <Box
+                sx={{
+                  display: { xs: "flex", md: "none" },
+                  flexDirection: "column",
+                  gap: 2,
+                }}
+              >
                 {products.map((product: Product) => (
                   <Card
                     key={product._id?.toString()}
@@ -134,7 +140,9 @@ export default async function ManageProductsPage() {
                           </Box>
                         </Box>
 
-                        <Typography sx={{ fontWeight: 600, color: "primary.main" }}>
+                        <Typography
+                          sx={{ fontWeight: 600, color: "primary.main" }}
+                        >
                           {formatCurrency(product.price, "USD")}
                         </Typography>
 
@@ -153,16 +161,24 @@ export default async function ManageProductsPage() {
                 <Table>
                   <TableHead>
                     <TableRow>
-                      <TableCell sx={{ fontWeight: 700, color: "text.secondary" }}>
+                      <TableCell
+                        sx={{ fontWeight: 700, color: "text.secondary" }}
+                      >
                         Product
                       </TableCell>
-                      <TableCell sx={{ fontWeight: 700, color: "text.secondary" }}>
+                      <TableCell
+                        sx={{ fontWeight: 700, color: "text.secondary" }}
+                      >
                         Description
                       </TableCell>
-                      <TableCell sx={{ fontWeight: 700, color: "text.secondary" }}>
+                      <TableCell
+                        sx={{ fontWeight: 700, color: "text.secondary" }}
+                      >
                         Price
                       </TableCell>
-                      <TableCell sx={{ fontWeight: 700, color: "text.secondary" }}>
+                      <TableCell
+                        sx={{ fontWeight: 700, color: "text.secondary" }}
+                      >
                         Actions
                       </TableCell>
                     </TableRow>
@@ -189,7 +205,10 @@ export default async function ManageProductsPage() {
                                 objectFit: "cover",
                               }}
                             />
-                            <Typography variant="body1" sx={{ fontWeight: 500 }}>
+                            <Typography
+                              variant="body1"
+                              sx={{ fontWeight: 500 }}
+                            >
                               {product.title}
                             </Typography>
                           </Box>
@@ -199,7 +218,9 @@ export default async function ManageProductsPage() {
                           {product.description || "-"}
                         </TableCell>
 
-                        <TableCell sx={{ fontWeight: 600, color: "primary.main" }}>
+                        <TableCell
+                          sx={{ fontWeight: 600, color: "primary.main" }}
+                        >
                           {formatCurrency(product.price, "USD")}
                         </TableCell>
 
