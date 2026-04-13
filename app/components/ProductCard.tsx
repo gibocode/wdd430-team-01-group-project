@@ -47,12 +47,7 @@ export default function ProductCard({
             height: 200,
           }}
         >
-          <Image
-            src={image}
-            alt={name}
-            fill
-            style={{ objectFit: "cover" }}
-          />
+          <Image src={image} alt={name} fill style={{ objectFit: "cover" }} />
         </Box>
 
         <CardContent>
@@ -60,11 +55,7 @@ export default function ProductCard({
             {name}
           </Typography>
 
-          <Typography
-            variant="body2"
-            color="text.secondary"
-            sx={{ mt: 0.5 }}
-          >
+          <Typography variant="body2" color="text.secondary" sx={{ mt: 0.5 }}>
             {description}
           </Typography>
 

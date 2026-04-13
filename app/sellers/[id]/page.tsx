@@ -5,12 +5,7 @@ import Image from "next/image";
 import { fetchSellerById } from "@/lib/services/sellers";
 import { getAllProductsBySellerId } from "@/models/product";
 import { mapProductToUi, UiProduct } from "@/lib/mappers/product";
-import {
-  Alert,
-  Box,
-  Container,
-  Typography,
-} from "@mui/material";
+import { Alert, Box, Container, Typography } from "@mui/material";
 
 type Props = {
   params: Promise<{

@@ -105,11 +105,18 @@ export default async function ManageProfilePage() {
               />
               <Typography
                 variant="h6"
-                sx={{ fontSize: 26, fontWeight: 600, mt: 2, textAlign: "center" }}
+                sx={{
+                  fontSize: 26,
+                  fontWeight: 600,
+                  mt: 2,
+                  textAlign: "center",
+                }}
               >
                 {seller.sellerName}
               </Typography>
-              <Typography sx={{ mt: 1, color: "text.secondary", textAlign: "center" }}>
+              <Typography
+                sx={{ mt: 1, color: "text.secondary", textAlign: "center" }}
+              >
                 {seller.shopName}
               </Typography>
             </Grid>

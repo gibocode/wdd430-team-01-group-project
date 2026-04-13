@@ -95,14 +95,12 @@ export default function AddProductButtonWithModal() {
 
             <Divider />
 
-            <CardContent sx={{ display: "flex", flexDirection: "column", gap: 2.5 }}>
+            <CardContent
+              sx={{ display: "flex", flexDirection: "column", gap: 2.5 }}
+            >
               <FormGroup>
                 <FormControl fullWidth sx={{ mb: 2 }}>
-                  <TextField
-                    id="product-name"
-                    label="Product Name"
-                    required
-                  />
+                  <TextField id="product-name" label="Product Name" required />
                 </FormControl>
 
                 <FormControl fullWidth sx={{ mb: 2 }}>

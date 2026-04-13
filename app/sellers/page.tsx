@@ -21,7 +21,10 @@ export default async function SellersPage() {
 
       <Container maxWidth="lg" sx={{ py: 4 }}>
         <Box component="section">
-          <Typography variant="h4" sx={{ fontWeight: 700, color: "text.primary" }}>
+          <Typography
+            variant="h4"
+            sx={{ fontWeight: 700, color: "text.primary" }}
+          >
             Sellers
           </Typography>
           <Typography sx={{ mt: 1, color: "text.secondary" }}>

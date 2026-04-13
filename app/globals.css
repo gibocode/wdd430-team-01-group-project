@@ -1,9 +1,9 @@
 @import "tailwindcss";
 
 :root {
-  --background: #FAFAFA;
-  --foreground: #1A1A1A;
-  --sidebar-background: #FFFFFF;
+  --background: #fafafa;
+  --foreground: #1a1a1a;
+  --sidebar-background: #ffffff;
   --sidebar-item-active: rgba(85, 96, 232, 0.14);
   --sidebar-item-hover: rgba(85, 96, 232, 0.08);
 }

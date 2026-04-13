@@ -6,9 +6,7 @@ type Props = {
   message?: string;
 };
 
-export default function LoadingState({
-  message = "Loading...",
-}: Props) {
+export default function LoadingState({ message = "Loading..." }: Props) {
   return (
     <Container maxWidth="lg">
       <Box
@@ -24,9 +22,7 @@ export default function LoadingState({
       >
         <CircularProgress color="primary" />
 
-        <Typography color="text.secondary">
-          {message}
-        </Typography>
+        <Typography color="text.secondary">{message}</Typography>
       </Box>
     </Container>
   );

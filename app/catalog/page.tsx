@@ -10,7 +10,6 @@ import {
   InputLabel,
   MenuItem,
   Select,
-  SelectChangeEvent,
   Typography,
   Alert,
 } from "@mui/material";
@@ -68,7 +67,10 @@ export default async function CatalogPage({ searchParams }: CatalogPageProps) {
 
       <Container maxWidth="lg" sx={{ py: 4 }}>
         <Box component="section">
-          <Typography variant="h4" sx={{ fontWeight: 700, color: "text.primary" }}>
+          <Typography
+            variant="h4"
+            sx={{ fontWeight: 700, color: "text.primary" }}
+          >
             Catalog
           </Typography>
           <Typography sx={{ mt: 1, color: "text.secondary" }}>

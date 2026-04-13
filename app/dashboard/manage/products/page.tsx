@@ -85,16 +85,24 @@ export default async function ManageProductsPage() {
               <Table>
                 <TableHead>
                   <TableRow>
-                    <TableCell sx={{ fontWeight: 700, color: "text.secondary" }}>
+                    <TableCell
+                      sx={{ fontWeight: 700, color: "text.secondary" }}
+                    >
                       Product
                     </TableCell>
-                    <TableCell sx={{ fontWeight: 700, color: "text.secondary" }}>
+                    <TableCell
+                      sx={{ fontWeight: 700, color: "text.secondary" }}
+                    >
                       Description
                     </TableCell>
-                    <TableCell sx={{ fontWeight: 700, color: "text.secondary" }}>
+                    <TableCell
+                      sx={{ fontWeight: 700, color: "text.secondary" }}
+                    >
                       Price
                     </TableCell>
-                    <TableCell sx={{ fontWeight: 700, color: "text.secondary" }}>
+                    <TableCell
+                      sx={{ fontWeight: 700, color: "text.secondary" }}
+                    >
                       Actions
                     </TableCell>
                   </TableRow>
@@ -131,7 +139,9 @@ export default async function ManageProductsPage() {
                         {product.description || "-"}
                       </TableCell>
 
-                      <TableCell sx={{ fontWeight: 600, color: "primary.main" }}>
+                      <TableCell
+                        sx={{ fontWeight: 600, color: "primary.main" }}
+                      >
                         {formatCurrency(product.price, "USD")}
                       </TableCell>
 

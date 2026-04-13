@@ -37,7 +37,7 @@ export default function AuthNavLinks({ mobile = false, onNavigate }: Props) {
     },
   };
 
-  const renderLinks = (style: any) => (
+  const renderLinks = (style: React.CSSProperties) => (
     <>
       <Link href="/" onClick={onNavigate} style={style}>
         Home
