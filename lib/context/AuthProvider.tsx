@@ -1,10 +1,10 @@
 "use client";
 
-import { User } from "@/types/user";
+import { AuthUser } from "@/types/auth-user";
 import { createContext, useContext, useEffect, useRef, useState } from "react";
 
 type AuthContextType = {
-  user: User | null;
+  user: AuthUser | null;
   loading: boolean;
   refreshUser: () => Promise<void>;
 };
@@ -20,7 +20,7 @@ export default function AuthProvider({
 }: {
   children: React.ReactNode;
 }) {
-  const [user, setUser] = useState<User | null>(null);
+  const [user, setUser] = useState<AuthUser | null>(null);
   const [loading, setLoading] = useState(true);
   const fetched = useRef<boolean>(false);
   const fetchUser = async () => {

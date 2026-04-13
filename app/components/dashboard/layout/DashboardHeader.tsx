@@ -4,6 +4,7 @@ import { AppBar, Box, Toolbar, IconButton } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
 import UserDropdown from "./header/UserDropdown";
 import { useAuth } from "@/lib/context/AuthProvider";
+import { useEffect, useState } from "react";
 
 export default function DashboardHeader({
   onMenuClick,
@@ -11,6 +12,35 @@ export default function DashboardHeader({
   onMenuClick: () => void;
 }) {
   const { user, loading } = useAuth();
+  const [profileUrl, setProfileUrl] = useState<string | undefined>(undefined);
+
+  useEffect(() => {
+    const fetchSellerProfile = async () => {
+      if (!user?.userId) {
+        setProfileUrl(undefined);
+        return;
+      }
+
+      try {
+        const response = await fetch(`/api/sellers/${user.userId}`, {
+          credentials: "include",
+        });
+
+        const data = await response.json();
+
+        if (response.ok && data.data?.profileUrl) {
+          setProfileUrl(data.data.profileUrl);
+        } else {
+          setProfileUrl(undefined);
+        }
+      } catch (error) {
+        console.error("Failed to fetch seller profile:", error);
+        setProfileUrl(undefined);
+      }
+    };
+
+    fetchSellerProfile();
+  }, [user?.userId]);
 
   return (
     <AppBar
@@ -53,7 +83,9 @@ export default function DashboardHeader({
             </IconButton>
           </Box>
 
-          {!loading && user && <UserDropdown user={user} />}
+          {!loading && user && (
+            <UserDropdown user={user} profileUrl={profileUrl} />
+          )}
         </Box>
       </Toolbar>
     </AppBar>
