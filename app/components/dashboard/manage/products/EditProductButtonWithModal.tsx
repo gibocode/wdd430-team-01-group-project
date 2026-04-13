@@ -12,12 +12,15 @@ import {
   FormControl,
   TextField,
   Box,
+  Alert,
+  CircularProgress,
 } from "@mui/material";
 import { IconEdit, IconTrash, IconUpload } from "@tabler/icons-react";
 import { useState } from "react";
 import styled from "@emotion/styled";
 import { Product } from "@/types/product";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 
 const VisuallyHiddenInput = styled("input")({
   clip: "rect(0 0 0 0)",
@@ -36,16 +39,51 @@ export default function EditProductButtonWithModal({
 }: {
   product: Product;
 }) {
+  const router = useRouter();
   const [openEditProductModal, setOpenEditProductModal] = useState(false);
   const [image, setImage] = useState(product.image);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isUploadingImage, setIsUploadingImage] = useState(false);
+  const [error, setError] = useState("");
+
   const [formValues, setFormValues] = useState({
-    name: product.title,
+    title: product.title,
     description: product.description ?? "",
     price: product.price,
   });
 
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+    setError("");
+    setIsSubmitting(true);
+
+    try {
+      const response = await fetch(`/api/products/${product._id?.toString()}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          title: formValues.title,
+          description: formValues.description,
+          price: Number(formValues.price),
+          image: image || "/placeholder.svg",
+        }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.message || "Failed to update product.");
+      }
+
+      setOpenEditProductModal(false);
+      router.refresh();
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Something went wrong.");
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -60,15 +98,37 @@ export default function EditProductButtonWithModal({
     setImage("");
   };
 
-  const handleUploadImage = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleUploadImage = async (
+    event: React.ChangeEvent<HTMLInputElement>,
+  ) => {
     const file = event.target.files?.[0];
     if (!file) return;
 
-    const reader = new FileReader();
-    reader.onloadend = () => {
-      setImage(reader.result as string);
-    };
-    reader.readAsDataURL(file);
+    setError("");
+    setIsUploadingImage(true);
+
+    try {
+      const uploadFormData = new FormData();
+      uploadFormData.append("file", file);
+
+      const response = await fetch("/api/upload", {
+        method: "POST",
+        body: uploadFormData,
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.message || "Failed to upload image.");
+      }
+
+      setImage(data.data.imageUrl);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Failed to upload image.");
+    } finally {
+      setIsUploadingImage(false);
+      event.target.value = "";
+    }
   };
 
   return (
@@ -89,28 +149,28 @@ export default function EditProductButtonWithModal({
         sx={{
           display: "flex",
           justifyContent: "center",
-          alignItems: "center",
+          alignItems: "flex-start",
           zIndex: 2000,
           px: 2,
-        }}
-        aria-labelledby="edit-product-modal"
-        aria-describedby="edit-product-modal-description"
-        slotProps={{
-          backdrop: {
-            sx: {
-              backgroundColor: "rgba(0, 0, 0, 0.5)",
-            },
-          },
+          pt: "88px",
+          pb: 3,
         }}
       >
         <Box
           component="form"
           onSubmit={handleSubmit}
-          sx={{ width: "100%", maxWidth: 520 }}
+          sx={{
+            width: "100%",
+            maxWidth: 520,
+            maxHeight: "calc(100vh - 112px)",
+          }}
         >
           <Card
             sx={{
               width: "100%",
+              maxHeight: "calc(100vh - 112px)",
+              display: "flex",
+              flexDirection: "column",
               backgroundColor: "background.paper",
               borderRadius: 2,
               boxShadow: 3,
@@ -131,16 +191,24 @@ export default function EditProductButtonWithModal({
             <Divider />
 
             <CardContent
-              sx={{ display: "flex", flexDirection: "column", gap: 2.5 }}
+              sx={{
+                display: "flex",
+                flexDirection: "column",
+                gap: 2.5,
+                overflowY: "auto",
+                flex: 1,
+              }}
             >
+              {error && <Alert severity="error">{error}</Alert>}
+
               <FormGroup>
                 <FormControl fullWidth sx={{ mb: 2 }}>
                   <TextField
                     id="product-name"
-                    name="name"
+                    name="title"
                     label="Product Name"
                     required
-                    value={formValues.name}
+                    value={formValues.title}
                     onChange={handleChange}
                   />
                 </FormControl>
@@ -156,7 +224,7 @@ export default function EditProductButtonWithModal({
                     >
                       <Image
                         src={image}
-                        alt={formValues.name}
+                        alt={formValues.title}
                         width={100}
                         height={100}
                         style={{
@@ -183,16 +251,25 @@ export default function EditProductButtonWithModal({
                       variant="outlined"
                       color="primary"
                       tabIndex={-1}
-                      startIcon={<IconUpload />}
+                      startIcon={isUploadingImage ? undefined : <IconUpload />}
                       sx={{
                         justifyContent: "flex-start",
                         textTransform: "none",
                         fontWeight: 500,
                       }}
+                      disabled={isUploadingImage}
                     >
-                      Upload Image
+                      {isUploadingImage ? (
+                        <>
+                          <CircularProgress size={18} sx={{ mr: 1 }} />
+                          Uploading Image...
+                        </>
+                      ) : (
+                        "Upload Image"
+                      )}
                       <VisuallyHiddenInput
                         type="file"
+                        accept="image/*"
                         onChange={handleUploadImage}
                       />
                     </Button>
@@ -251,9 +328,10 @@ export default function EditProductButtonWithModal({
                 variant="contained"
                 color="primary"
                 type="submit"
+                disabled={isSubmitting || isUploadingImage}
                 sx={{ textTransform: "none", fontWeight: 600 }}
               >
-                Update Product
+                {isSubmitting ? "Updating..." : "Update Product"}
               </Button>
             </CardActions>
           </Card>

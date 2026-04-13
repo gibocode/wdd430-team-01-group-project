@@ -10,6 +10,8 @@ import {
   Typography,
   Box,
   TableContainer,
+  Stack,
+  ButtonGroup,
 } from "@mui/material";
 import Image from "next/image";
 import { formatCurrency } from "@/lib/utils";
@@ -64,7 +66,7 @@ export default async function ManageProductsPage() {
             <Typography variant="h4" sx={{ fontSize: 24, fontWeight: 700 }}>
               Manage Products
             </Typography>
-            <AddProductButtonWithModal />
+            <AddProductButtonWithModal sellerId={user.userId} />
           </Box>
         </CardContent>
       </Card>
@@ -81,79 +83,136 @@ export default async function ManageProductsPage() {
               No products found yet.
             </Typography>
           ) : (
-            <TableContainer>
-              <Table>
-                <TableHead>
-                  <TableRow>
-                    <TableCell
-                      sx={{ fontWeight: 700, color: "text.secondary" }}
-                    >
-                      Product
-                    </TableCell>
-                    <TableCell
-                      sx={{ fontWeight: 700, color: "text.secondary" }}
-                    >
-                      Description
-                    </TableCell>
-                    <TableCell
-                      sx={{ fontWeight: 700, color: "text.secondary" }}
-                    >
-                      Price
-                    </TableCell>
-                    <TableCell
-                      sx={{ fontWeight: 700, color: "text.secondary" }}
-                    >
-                      Actions
-                    </TableCell>
-                  </TableRow>
-                </TableHead>
-
-                <TableBody>
-                  {products.map((product: Product) => (
-                    <TableRow key={product._id?.toString()} hover>
-                      <TableCell>
-                        <Box
-                          display="flex"
-                          flexDirection="row"
-                          alignItems="center"
-                          gap={2}
-                        >
+            <>
+              {/* Mobile / small screens */}
+              <Box sx={{ display: { xs: "flex", md: "none" }, flexDirection: "column", gap: 2 }}>
+                {products.map((product: Product) => (
+                  <Card
+                    key={product._id?.toString()}
+                    sx={{
+                      backgroundColor: "background.paper",
+                      borderRadius: 2,
+                      boxShadow: 1,
+                    }}
+                  >
+                    <CardContent>
+                      <Stack spacing={2}>
+                        <Box display="flex" gap={2} alignItems="flex-start">
                           <Image
                             src={product.image}
                             alt={product.title}
-                            width={50}
-                            height={50}
+                            width={64}
+                            height={64}
                             style={{
                               borderRadius: "8px",
-                              maxHeight: "50px",
                               objectFit: "cover",
+                              flexShrink: 0,
                             }}
                           />
-                          <Typography variant="body1" sx={{ fontWeight: 500 }}>
-                            {product.title}
-                          </Typography>
+
+                          <Box sx={{ minWidth: 0 }}>
+                            <Typography
+                              variant="body1"
+                              sx={{
+                                fontWeight: 600,
+                                wordBreak: "break-word",
+                              }}
+                            >
+                              {product.title}
+                            </Typography>
+
+                            <Typography
+                              variant="body2"
+                              sx={{
+                                mt: 0.5,
+                                color: "text.secondary",
+                                wordBreak: "break-word",
+                              }}
+                            >
+                              {product.description || "-"}
+                            </Typography>
+                          </Box>
                         </Box>
-                      </TableCell>
 
-                      <TableCell sx={{ color: "text.secondary" }}>
-                        {product.description || "-"}
-                      </TableCell>
+                        <Typography sx={{ fontWeight: 600, color: "primary.main" }}>
+                          {formatCurrency(product.price, "USD")}
+                        </Typography>
 
-                      <TableCell
-                        sx={{ fontWeight: 600, color: "primary.main" }}
-                      >
-                        {formatCurrency(product.price, "USD")}
-                      </TableCell>
+                        <ButtonGroup>
+                          <EditProductButtonWithModal product={product} />
+                          <DeleteProductButtonWithModal product={product} />
+                        </ButtonGroup>
+                      </Stack>
+                    </CardContent>
+                  </Card>
+                ))}
+              </Box>
 
-                      <TableCell>
-                        <EditProductButtonWithModal product={product} />
-                        <DeleteProductButtonWithModal product={product} />
+              {/* Desktop / medium and up */}
+              <TableContainer sx={{ display: { xs: "none", md: "block" } }}>
+                <Table>
+                  <TableHead>
+                    <TableRow>
+                      <TableCell sx={{ fontWeight: 700, color: "text.secondary" }}>
+                        Product
+                      </TableCell>
+                      <TableCell sx={{ fontWeight: 700, color: "text.secondary" }}>
+                        Description
+                      </TableCell>
+                      <TableCell sx={{ fontWeight: 700, color: "text.secondary" }}>
+                        Price
+                      </TableCell>
+                      <TableCell sx={{ fontWeight: 700, color: "text.secondary" }}>
+                        Actions
                       </TableCell>
                     </TableRow>
-                  ))}
-                </TableBody>
-              </Table>
-            </TableContainer>
+                  </TableHead>
+
+                  <TableBody>
+                    {products.map((product: Product) => (
+                      <TableRow key={product._id?.toString()} hover>
+                        <TableCell>
+                          <Box
+                            display="flex"
+                            flexDirection="row"
+                            alignItems="center"
+                            gap={2}
+                          >
+                            <Image
+                              src={product.image}
+                              alt={product.title}
+                              width={50}
+                              height={50}
+                              style={{
+                                borderRadius: "8px",
+                                maxHeight: "50px",
+                                objectFit: "cover",
+                              }}
+                            />
+                            <Typography variant="body1" sx={{ fontWeight: 500 }}>
+                              {product.title}
+                            </Typography>
+                          </Box>
+                        </TableCell>
+
+                        <TableCell sx={{ color: "text.secondary" }}>
+                          {product.description || "-"}
+                        </TableCell>
+
+                        <TableCell sx={{ fontWeight: 600, color: "primary.main" }}>
+                          {formatCurrency(product.price, "USD")}
+                        </TableCell>
+
+                        <TableCell>
+                          <EditProductButtonWithModal product={product} />
+                          <DeleteProductButtonWithModal product={product} />
+                        </TableCell>
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
+              </TableContainer>
+            </>
           )}
         </CardContent>
       </Card>

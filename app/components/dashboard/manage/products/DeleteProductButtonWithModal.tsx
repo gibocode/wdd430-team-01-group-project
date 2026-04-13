@@ -10,21 +10,45 @@ import {
   CardActions,
   Card,
   Box,
+  Alert,
 } from "@mui/material";
 import { useState } from "react";
 import { IconTrash } from "@tabler/icons-react";
 import { Product } from "@/types/product";
+import { useRouter } from "next/navigation";
 
 export default function DeleteProductButtonWithModal({
   product,
 }: {
   product: Product;
 }) {
+  const router = useRouter();
   const [openDeleteProductModal, setOpenDeleteProductModal] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [error, setError] = useState("");
 
-  const handleDeleteProduct = () => {
-    console.log(product);
-    console.log("Delete product");
+  const handleDeleteProduct = async () => {
+    setError("");
+    setIsSubmitting(true);
+
+    try {
+      const response = await fetch(`/api/products/${product._id?.toString()}`, {
+        method: "DELETE",
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.message || "Failed to delete product.");
+      }
+
+      setOpenDeleteProductModal(false);
+      router.refresh();
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Something went wrong.");
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -73,6 +97,12 @@ export default function DeleteProductButtonWithModal({
             <Divider />
 
             <CardContent>
+              {error && (
+                <Alert severity="error" sx={{ mb: 2 }}>
+                  {error}
+                </Alert>
+              )}
+
               <Typography variant="body1" sx={{ color: "text.primary" }}>
                 Are you sure you want to delete{" "}
                 <Box component="span" sx={{ fontWeight: 700 }}>
@@ -110,13 +140,11 @@ export default function DeleteProductButtonWithModal({
                 type="button"
                 variant="contained"
                 color="error"
-                onClick={() => {
-                  setOpenDeleteProductModal(false);
-                  handleDeleteProduct();
-                }}
+                onClick={handleDeleteProduct}
+                disabled={isSubmitting}
                 sx={{ textTransform: "none", fontWeight: 600 }}
               >
-                Delete
+                {isSubmitting ? "Deleting..." : "Delete"}
               </Button>
             </CardActions>
           </Card>
