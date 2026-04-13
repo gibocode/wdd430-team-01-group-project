@@ -7,6 +7,7 @@ export interface Seller {
   tagline: string;
   story: string;
   profileUrl: string;
+  isDemo?: boolean;
   createdAt: Date;
   updatedAt: Date;
 }
