@@ -14,10 +14,16 @@ import {
 import { useState } from "react";
 import { Logout } from "@mui/icons-material";
 import { IconUser } from "@tabler/icons-react";
-import { User } from "@/types/user";
+import { AuthUser } from "@/types/auth-user";
 import NextLink from "@/app/components/NextLink";
 
-export default function UserDropdown({ user }: { user: User }) {
+export default function UserDropdown({
+  user,
+  profileUrl,
+}: {
+  user: AuthUser;
+  profileUrl?: string;
+}) {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
 
@@ -47,6 +53,7 @@ export default function UserDropdown({ user }: { user: User }) {
             onClick={handleClick}
           >
             <Avatar
+              src={profileUrl}
               sx={{
                 width: 40,
                 height: 40,
@@ -55,7 +62,7 @@ export default function UserDropdown({ user }: { user: User }) {
                 fontWeight: 700,
               }}
             >
-              {user.name?.charAt(0).toUpperCase()}
+              {!profileUrl ? user.name?.charAt(0).toUpperCase() : null}
             </Avatar>
           </IconButton>
         </Tooltip>
@@ -114,6 +121,7 @@ export default function UserDropdown({ user }: { user: User }) {
           py={1.5}
         >
           <Avatar
+            src={profileUrl}
             sx={{
               width: 40,
               height: 40,
@@ -122,7 +130,7 @@ export default function UserDropdown({ user }: { user: User }) {
               fontWeight: 700,
             }}
           >
-            {user.name?.charAt(0).toUpperCase()}
+            {!profileUrl ? user.name?.charAt(0).toUpperCase() : null}
           </Avatar>
 
           <Box display="flex" flexDirection="column">

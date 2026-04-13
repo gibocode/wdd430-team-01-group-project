@@ -4,10 +4,10 @@ import { z } from "zod";
 
 // Seller info data validation
 const SellerSchema = z.object({
-  sellerName: z.string().min(5),
-  shopName: z.string().min(5),
-  tagline: z.string().min(5),
-  story: z.string().min(10),
+  sellerName: z.string().min(5, "Seller name must be at least 5 characters"),
+  shopName: z.string().min(5, "Shop name must be at least 5 characters"),
+  tagline: z.string().min(5, "Tagline must be at least 5 characters"),
+  story: z.string().min(10, "Story must be at least 10 characters"),
   profileUrl: z.string().min(5).optional(),
 });
 
@@ -71,10 +71,8 @@ export async function PUT(
     const { sellerId } = await params;
     const body = await request.json();
 
-    // Validates seller info data
     const validated = SellerSchema.parse(body);
 
-    // Updates seller info
     const success = await updateSellerInfo(sellerId, validated);
 
     return Response.json({
@@ -84,6 +82,17 @@ export async function PUT(
     });
   } catch (error) {
     console.error(error);
+
+    if (error instanceof z.ZodError) {
+      return Response.json(
+        {
+          success: false,
+          message: error.issues[0]?.message || "Invalid seller information.",
+        },
+        { status: 400 },
+      );
+    }
+
     return Response.json(
       {
         success: false,
