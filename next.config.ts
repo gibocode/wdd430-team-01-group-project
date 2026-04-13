@@ -6,13 +6,17 @@ const nextConfig: NextConfig = {
       {
         protocol: "http",
         hostname: "localhost",
-        port: "",
-        pathname: "/",
+        port: "3000",
+        pathname: "/**",
       },
       {
         protocol: "https",
         hostname: "*.mypinata.cloud",
-        port: "",
+        pathname: "/**",
+      },
+      {
+        protocol: "https",
+        hostname: "gateway.pinata.cloud",
         pathname: "/**",
       },
     ],
