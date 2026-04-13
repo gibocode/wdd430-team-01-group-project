@@ -27,15 +27,17 @@ export async function findSellerById(id: string) {
 // Create new seller
 export async function createSeller(
   props: Omit<Seller, "createdAt" | "updatedAt">,
-): Promise<Seller> {
+) {
   const seller: Seller = {
     ...props,
     createdAt: new Date(),
     updatedAt: new Date(),
   };
+
   const collection = await getCollection();
-  await collection.insertOne(seller);
-  return seller;
+  const result = await collection.insertOne(seller);
+
+  return { _id: result.insertedId, ...seller };
 }
 
 // Update seller info
