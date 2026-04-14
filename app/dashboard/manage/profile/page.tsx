@@ -1,5 +1,6 @@
 import { Box, Card, Typography, CardContent } from "@mui/material";
 import { getCurrentUser } from "@/lib/auth";
+import { getOrCreateSeller } from "@/lib/services/sellers";
 import ManageProfileForm from "@/app/components/dashboard/manage/profile/ManageProfileForm";
 
 export default async function ManageProfilePage() {
@@ -20,27 +21,7 @@ export default async function ManageProfilePage() {
     );
   }
 
-  const response = await fetch(
-    `${process.env.NEXT_PUBLIC_API_URL}/api/sellers/${user.userId}`,
-    { cache: "no-store" },
-  );
-  const responseJson = await response.json();
-  const seller = responseJson.data;
-
-  if (!seller) {
-    return (
-      <Card sx={{ backgroundColor: "background.paper" }}>
-        <CardContent>
-          <Typography variant="h5" sx={{ fontWeight: 700 }}>
-            Seller Profile
-          </Typography>
-          <Typography sx={{ mt: 1, color: "text.secondary" }}>
-            Seller profile not found.
-          </Typography>
-        </CardContent>
-      </Card>
-    );
-  }
+  const seller = await getOrCreateSeller(user.userId);
 
   return (
     <>

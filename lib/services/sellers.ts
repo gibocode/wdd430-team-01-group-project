@@ -1,4 +1,5 @@
-import { getAllSellers, findSellerById } from "@/models/seller";
+import { getAllSellers, findSellerById, createSeller } from "@/models/seller";
+import { findUserById } from "@/models/user";
 import { mapSellerToUi, UiSeller } from "@/lib/mappers/seller";
 import { mockSellers } from "@/app/data/sellers";
 
@@ -80,4 +81,29 @@ export async function fetchSellerById(id: string): Promise<FetchSellerResult> {
       usingFallback: true,
     };
   }
+}
+
+export async function getOrCreateSeller(userId: string) {
+  let seller = await findSellerById(userId);
+
+  if (!seller) {
+    const user = await findUserById(userId);
+
+    if (!user || !user._id) {
+      throw new Error("User not found for seller creation.");
+    }
+
+    const defaultName = user.name?.trim() || user.email.split("@")[0];
+
+    seller = await createSeller({
+      sellerId: user._id,
+      sellerName: defaultName,
+      shopName: `${defaultName}'s Shop`,
+      tagline: "Update your shop tagline",
+      story: "Tell customers about your shop and your products.",
+      profileUrl: "/placeholder.svg",
+    });
+  }
+
+  return seller;
 }
