@@ -83,6 +83,7 @@ export default async function SellersPage() {
                       alt={seller.shopName}
                       fill
                       style={{ objectFit: "cover" }}
+                      unoptimized
                     />
                   </Box>
 

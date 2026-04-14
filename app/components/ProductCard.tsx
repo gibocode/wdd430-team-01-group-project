@@ -47,7 +47,7 @@ export default function ProductCard({
             height: 200,
           }}
         >
-          <Image src={image} alt={name} fill style={{ objectFit: "cover" }} />
+          <Image src={image} alt={name} fill style={{ objectFit: "cover" }} unoptimized/>
         </Box>
 
         <CardContent>

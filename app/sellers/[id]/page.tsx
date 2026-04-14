@@ -78,6 +78,7 @@ export default async function SellerProfilePage({ params }: Props) {
                 alt={seller.shopName}
                 fill
                 style={{ objectFit: "cover" }}
+                unoptimized
               />
             </Box>
           </Box>

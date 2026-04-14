@@ -232,6 +232,7 @@ export default function EditProductButtonWithModal({
                           objectFit: "cover",
                           maxHeight: "100px",
                         }}
+                        unoptimized
                       />
                       <Button
                         type="button"

@@ -94,6 +94,7 @@ export default async function ProductDetailPage({ params }: Props) {
                 alt={product.name}
                 fill
                 style={{ objectFit: "cover" }}
+                unoptimized
               />
             </Box>
           </Box>
