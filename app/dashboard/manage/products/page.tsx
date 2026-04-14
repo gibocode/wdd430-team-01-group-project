@@ -114,6 +114,7 @@ export default async function ManageProductsPage() {
                               objectFit: "cover",
                               flexShrink: 0,
                             }}
+                            unoptimized
                           />
 
                           <Box sx={{ minWidth: 0 }}>
@@ -204,6 +205,8 @@ export default async function ManageProductsPage() {
                                 maxHeight: "50px",
                                 objectFit: "cover",
                               }}
+                              unoptimized
+                              loading="lazy"
                             />
                             <Typography
                               variant="body1"
