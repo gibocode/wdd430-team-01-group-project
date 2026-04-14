@@ -1,9 +1,4 @@
-import {
-  Box,
-  Card,
-  Typography,
-  CardContent,
-} from "@mui/material";
+import { Box, Card, Typography, CardContent } from "@mui/material";
 import { getCurrentUser } from "@/lib/auth";
 import ManageProfileForm from "@/app/components/dashboard/manage/profile/ManageProfileForm";
 
