@@ -1,4 +1,5 @@
 import { getAllProductsBySellerId, createProduct } from "@/models/product";
+import { getOrCreateSeller } from "@/lib/services/sellers";
 import { z } from "zod";
 import { Product } from "@/types/product";
 import { ObjectId } from "mongodb";
@@ -47,16 +48,15 @@ export async function POST(
     const { sellerId } = await params;
     const body = await request.json();
 
-    // Validate product data
     const validated = ProductSchema.parse(body);
 
-    // Build product data with server-owned fields
+    const seller = await getOrCreateSeller(sellerId);
+
     const data: Omit<Product, "_id" | "createdAt" | "updatedAt"> = {
       ...validated,
-      sellerId: new ObjectId(sellerId),
+      sellerId: seller.sellerId,
     };
 
-    // Create a product
     const product = await createProduct(data);
 
     return Response.json({

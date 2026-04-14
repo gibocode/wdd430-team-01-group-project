@@ -16,6 +16,7 @@ import {
 import Image from "next/image";
 import { formatCurrency } from "@/lib/utils";
 import { getCurrentUser } from "@/lib/auth";
+import { getOrCreateSeller } from "@/lib/services/sellers";
 import AddProductButtonWithModal from "@/app/components/dashboard/manage/products/AddProductButtonWithModal";
 import EditProductButtonWithModal from "@/app/components/dashboard/manage/products/EditProductButtonWithModal";
 import DeleteProductButtonWithModal from "@/app/components/dashboard/manage/products/DeleteProductButtonWithModal";
@@ -38,8 +39,10 @@ export default async function ManageProductsPage() {
     );
   }
 
+  const seller = await getOrCreateSeller(user.userId);
+
   const response = await fetch(
-    `${process.env.NEXT_PUBLIC_API_URL}/api/sellers/${user.userId}/products`,
+    `${process.env.NEXT_PUBLIC_API_URL}/api/sellers/${seller.sellerId.toString()}/products`,
     { cache: "no-store" },
   );
   const responseJson = await response.json();
